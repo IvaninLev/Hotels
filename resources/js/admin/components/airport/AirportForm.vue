@@ -45,6 +45,7 @@ const v$ = useVuelidate({rules, form})
                         @blur="v$.name.$touch()"
                     />
                 </div>
+                <h1> Hello </h1>
                 <div>
                     <label>City</label>
                     <v-select
