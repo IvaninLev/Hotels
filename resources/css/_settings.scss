@@ -1,0 +1,16 @@
+$body-font-family:"Roboto";
+$heading-font-family:"Roboto";
+
+@forward "vuetify/settings" with (
+  $typography: (
+    "hero-heading": (
+      "size": 8rem,
+      "weight": 800,
+      "line-height": 8.4375rem,
+      "text-transform": uppercase,
+      "font-family": $body-font-family
+    ),
+
+  )
+);
+
