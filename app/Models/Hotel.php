@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,24 +13,25 @@ use Illuminate\Support\Str;
 
 class Hotel extends Model
 {
-    use CrudTrait;
+
+    use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
+        'hotel_key',
         'name',
+        'price',
         'description',
         'images',
-        'country_id',
-        'hotel_key',
+        'rating',
+        'address',
         'city_id',
-        'room_type'
+        'features',
     ];
     protected $casts = [
-        'images' => 'array'
-    ];
-    protected $appends = [
-        'hotel_images'
+        'images' => 'array',
+        'features' => 'array',
     ];
 
 
@@ -41,35 +42,68 @@ class Hotel extends Model
         });
     }
 
-    public function country(): HasOne
+    public function roomTypes(): HasMany
     {
-        return $this->hasOne(Country::class);
+        return $this->hasMany(RoomType::class, 'hotel_id', 'id');
     }
 
-    public function city(): HasOne
+    public function nutrition(): HasMany
     {
-        return $this->hasOne(City::class);
+        return $this->hasMany(Nutrition::class, 'hotel_id', 'id');
     }
 
-    public function hotelImages(): Attribute
+    public function hotelFeatures(): HasMany
     {
-        $images = [];
-        foreach ($this->images as $image) {
-            $images[] = Storage::disk('public')->url($image);
-        }
+        return $this->hasMany(HotelFeature::class, 'hotel_id', 'id');
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function mainImage(): Attribute
+    {
         return Attribute::make(
-            get: fn() => $images
+            get: function () {
+                $images = $this->images;
+
+                if (is_array($images)) {
+                    $first = $images[0] ?? null;
+                } elseif (is_string($images)) {
+                    $decoded = json_decode($images, true);
+                    $first = $decoded[0] ?? null;
+                } else {
+                    $first = null;
+                }
+
+                return $first ? Storage::url($first) : null;
+            }
         );
     }
 
-    public function tour():BelongsTo
+    public function frontImages(): Attribute
     {
-        return $this->belongsTo(Tour::class);
-    }
+        return Attribute::make(
+            get: function () {
+                $images = $this->images;
+                if (is_array($images)) {
+                    return array_map(fn($img) => Storage::url($img), $images);
+                }
 
-    public function hotelRoomTypes(): HasMany
-    {
-        return $this->hasMany(HotelRoomType::class);
+                if (is_string($images)) {
+                    $decoded = json_decode($images, true) ?? [];
+                    return array_map(fn($img) => Storage::url($img), $decoded);
+                }
+
+                return [];
+            }
+        );
     }
 
 }

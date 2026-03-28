@@ -2,7 +2,13 @@
 
 namespace App\Enums;
 
-enum PaginationEnum:int
+enum PaginationEnum: int
 {
-    case PAGE_SIZE = 10;
+    case PAGE_SIZE = 9   ;
+
+    public static function size(): int
+    {
+        return self::PAGE_SIZE->value;
+    }
 }
+

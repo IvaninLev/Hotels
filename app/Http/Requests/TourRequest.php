@@ -11,11 +11,15 @@ class TourRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'price' => ['required', 'decimal:0'],
-            'hotel_id' => ['required', 'integer',],
-            'airport_id' => ['required', 'integer', ],
+            'base_price' => ['required', 'decimal:10,2'],
+            'images' => ['required', 'json'],
+            'hotel_id' => ['required', 'integer', 'exists:hotels,id'],
             'active_from' => ['required', 'date'],
-            'active_to' => ['required', 'date']
+            'active_to' => ['required', 'date'],
+            'tour_departure' => ['required', 'integer', 'exists:tour_departures,id'],
+            'dates' => ['required', 'date'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'city_id' => ['required', 'exists:cities,id'],
 
 
         ];

@@ -1,33 +1,35 @@
 <?php
 
+use App\Http\Controllers\DeparturePointController;
+use App\Http\Controllers\HotelFeatureController;
+use App\Http\Controllers\HotelsController;
+use App\Http\Controllers\HotelReviewsController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NutritionController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\ToursController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 Route::get('/tours', [ToursController::class, 'index']);
-Route::group([
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'namespace' => 'App\Http\Controllers\Admin',
-], function () {
-    Route::crud('city', 'CitiesCrudController');
+Route::get('/tours/filters', [ToursController::class, 'filtered']);
+Route::get('/tours/search', [ToursController::class, 'founded']);
+Route::get('/tours/{params}', [ToursController::class, 'view']);
 
-});
-Route::prefix('admin/hotel')->group(function () {
-    Route::post('store', [Admin\HotelCrudController::class, 'store']);
-    Route::post('{hotel}/update', [Admin\HotelCrudController::class, 'update']);
-});
 
-Route::prefix('admin/room-type')->group(function () {
-    Route::get('get-room-types', [Admin\RoomTypeCrudController::class, 'getRoomTypes']);
-    Route::post('store', [Admin\RoomTypeCrudController::class, 'store']);
-});
+Route::get('/hotels', [HotelsController::class, 'index']);
+Route::get('/hotels/{id}', [HotelsController::class, 'view']);
 
-Route::prefix('admin/country')->group(function () {
-    Route::get('get-cities', [Admin\CountriesCrudController::class, 'getCities']);
-});
+Route::get('/departure', [DeparturePointController::class, 'index']);
+
+Route::get('/news', [NewsController::class,'index']);
+
+Route::get('/reviews', [ReviewsController::class, 'index']);
+Route::post('/reviews', [ReviewsController::class, 'store']);
+
+Route::get('/hotelFeatures', [HotelFeatureController::class, 'index']);
+Route::get('/hotelNutrition', [NutritionController::class, 'index']);

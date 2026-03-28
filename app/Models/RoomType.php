@@ -2,32 +2,27 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RoomType extends Model
 {
-    use CrudTrait;
+    use HasFactory;
 
     public $timestamps = false;
     protected $fillable = [
-        'id',
-        'roomType',
-        'name',
-        'beds',
-        'price',
-        'area'
+        'room_type',
+        'max_persons',
+        'is_base',
+        'price_per_person',
+        'hotel_id',
     ];
 
-    public function services()
+    public function hotel(): BelongsTo
     {
-        return $this->belongsToMany(RoomService::class,
-            'rooms_services',
-            'room_type_id',
-            'room_service_id'
-        );
+        return $this->belongsTo(Hotel::class);
     }
-
 
 }

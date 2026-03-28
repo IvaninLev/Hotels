@@ -14,13 +14,14 @@ class HotelsRequest extends FormRequest
             'country' => ['required', 'exists:countries,id'],
             'city' => ['required', 'exists:cities,id'],
             'images' => ['required', 'array'],
-            'roomTypes' => ['required','    json', 'min:1'],
+            'rating' => [ 'required','max:5','min:1'],
+            'price' => ['required', 'decimal:8,2', 'min:1'],
+            'nutrition' => ['required', 'string'],
+            'hotel_features' => ['required', 'array'],
+            'roomTypes' => ['required','json', 'min:1'],
             'roomTypes.*' => ['array'],
-            'roomTypes.*.room_type_id' => ['required', 'int', 'exists:room_types,id'],
-            'roomTypes.*.beds' => ['required', 'int'],
-            'roomTypes.*.area' => ['required', 'decimal'],
+            'roomTypes.*.room_type_id' => ['required', 'integer', 'exists:room_types,id'],
             'roomTypes.*.price' => ['required', 'decimal'],
-            'roomTypes.*.total_rooms' => ['required', 'int']
         ];
     }
 

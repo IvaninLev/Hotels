@@ -1,10 +1,22 @@
-import axios from "axios";
+ import axios from "axios";
 
 class TourService {
     async getTours() {
-        return await axios.get('tours')
-            .then(response => response.data)
+        const response = await axios.get('/api/tours');
+        return response.data.data;
     }
+
+    async getToursPage(page = 1) {
+        const response = await axios.get('/api/tours', {params: {page}});
+        return response.data;
+    }
+
+    async getTour(id) {
+        const response = await axios.get(`/api/tours/${id}`);
+        return response.data?.data ?? response.data;
+    }
+
+
 }
 
 export default new TourService()

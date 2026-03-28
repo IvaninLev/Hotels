@@ -9,23 +9,55 @@ const routes = [
             {
                 path: '',
                 name: 'home',
-                component: () => import('../pages/Home.vue')
+                component: () => import('../pages/home/index.vue'),
             },
+            {
+                path: 'hotels',
+                name: 'hotels',
+                component: () => import('../pages/hotels/index.vue')
+            },
+
+            {
+                path: 'tour-selection',
+                name: 'TourSelection',
+                component: () => import('../pages/TourSelection/index.vue'),
+                meta: {
+                    breadcrumb: 'Подбор тура'
+                }
+            },
+            {
+                path: 'tour/:id',
+                name: 'tourDetail',
+                component: () => import('../pages/TourSelection/Details.vue'),
+                meta: {
+                    breadcrumb: 'Подробнее'
+                },
+            },
+            {
+                path: 'reviews',
+                name: 'reviews',
+                component: () => import('../pages/reviews/index.vue'),
+                meta: {
+                    breadcrumb: 'Отзывы'
+                }
+            },
+            {
+                path: 'news',
+                name: 'news',
+                component: () => import('../pages/News/index.vue'),
+                meta: {
+                    breadcrumb: "Новости"
+                }
+            }  ,
             {
                 path: 'about',
                 name: 'about',
-                component: () => import('../pages/About.vue')
-            },
-            {
-                path: 'buses',
-                name: 'buses',
-                component: () => import('../layouts/bus/index.vue')
-            },
-            {
-                path:'bus/create',
-                name:'create',
-                component: () => import('../layouts/bus/create.vue')
+                component: () => import('../pages/About/index.vue'),
+                meta: {
+                    breadcrumb: "Новости"
+                }
             }
+
         ]
     },
 ]

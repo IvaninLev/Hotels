@@ -1,20 +1,16 @@
-<script setup >
-
-import HeaderLayout from "../components/layout/HeaderLayout.vue";
-import FooterLayout from "../components/layout/FooterLayout.vue";
+<script setup>
+import AppHeader from "../components/common/AppHeader.vue";
+import AppFooter from "../components/common/AppFooter.vue";
 </script>
 
 <template>
     <v-app>
-        <HeaderLayout/>
-        <v-main>
-        <router-view/>
-        </v-main>
-        <FooterLayout/>
+        <AppHeader/>
 
+        <v-main>
+            <router-view/>
+        </v-main>
+
+        <AppFooter/>
     </v-app>
 </template>
-
-<style scoped>
-
-</style>
