@@ -6,6 +6,7 @@ use App\Enums\PaginationEnum;
 use App\Http\Resources\TourResource;
 use App\Models\Tour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ToursController extends Controller
 {
@@ -65,7 +66,13 @@ class ToursController extends Controller
             });
         });
 
-        $season = $request->offerType ?? $request->season;
+        $query->when($request->flightDate, function ($query, $date) {
+            $query->whereHas('tourDepartures', function ($q) use ($date) {
+                $q->whereDate('departure_date', $date);
+            });
+        });
+
+        $season = $request->season;
         $seasonMonths = match ($season) {
             'winter' => [12, 1, 2],
             'spring' => [3, 4, 5],
@@ -75,22 +82,7 @@ class ToursController extends Controller
         };
         if (!empty($seasonMonths)) {
             $query->where(function ($q) use ($seasonMonths) {
-                $q->whereHas('tourDepartures', function ($q) use ($seasonMonths) {
-                    $q->where(function ($q) use ($seasonMonths) {
-                        foreach ($seasonMonths as $month) {
-                            $q->orWhereIn('departure_date', $month);
-                        }
-                    });
-                })->orWhere(function ($q) use ($seasonMonths) {
-                    $q->whereNotNull('active_from')
-                        ->whereNotNull('active_to')
-                        ->where(function ($q) use ($seasonMonths) {
-                            foreach ($seasonMonths as $month) {
-                                $q->orWhereIn('active_from', $month)
-                                    ->orWhereIn('active_to', $month);
-                            }
-                        });
-                });
+                $q->where(DB::raw('MONTH(active_from)'), $seasonMonths);
             });
         }
 
@@ -133,7 +125,7 @@ class ToursController extends Controller
         return TourResource::collection($tours);
     }
 
-    public function founded(Request $request)
+    public function searched(Request $request)
     {
         $query = Tour::query()->with([
             'hotel',
@@ -143,29 +135,39 @@ class ToursController extends Controller
         ]);
 
         // откуда
-        $query->when($request->from, function ($q, $from) {
-            $q->whereHas('baseTourDeparture.airport.city', function ($q) use ($from) {
-                $q->where('name', 'like', "%{$from}%");
-            });
-        });
+//        $query->when($request->from, function ($q, $from) {
+//            $q->whereHas('tourDepartures.airport.city', function ($q) use ($from) {
+//                $q->where('name', 'like', "%{$from}%");
+//            });
+//        });
 
         // куда
-        $query->when($request->toPlace, function ($q, $to) {
-            $q->whereHas('city', function ($q) use ($to) {
-                $q->where('name', 'like', "%{$to}%");
+        $query->when($request->toPlace, function ($query, $searchQ) {
+            $query->whereHas('city', function ($query) use ($searchQ) {
+                $query->where('name', 'like', '%' . $searchQ . '%');
+            })->orWherehas('country', function ($query) use ($searchQ) {
+                $query->where('name', 'like', '%' . $searchQ . '%');
             });
         });
 
         $query->when($request->flightDate, function ($q, $date) {
-            $q->whereHas('tourDepartures', function ($q) use ($date) {
-                $q->whereDate('departure_date', '>=', $date);
+            $q->where(function ($q) use ($date) {
+                $q->whereDate('active_from', '<=', $date)
+                    ->whereDate('active_to', '>=', $date);
             });
         });
 
         $query->when($request->duration, function ($q, $duration) {
-            $q->whereHas('tourDepartures', function ($q) use ($duration) {
-                $q->where('night_count', (int)$duration);
-            });
+            if (str_contains($duration, '-')) {
+                [$min, $max] = explode('-', $duration);
+                $q->whereHas('tourDepartures', function ($q) use ($min, $max) {
+                    $q->whereBetween('night_count', [(int)$min, (int)$max]);
+                });
+            }else{
+                $q->whereHas('tourDepartures', function ($q) use ($duration) {
+                    $q->where('night_count', '>=', (int)$duration);
+                });
+            }
         });
 
         $persons = $request->tourists ?? $request->persons;
@@ -179,5 +181,6 @@ class ToursController extends Controller
         $tours = $query->paginate(PaginationEnum::PAGE_SIZE->value);
         return TourResource::collection($tours);
     }
+
 
 }

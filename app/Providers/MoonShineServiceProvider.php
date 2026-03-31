@@ -30,6 +30,9 @@ class MoonShineServiceProvider extends ServiceProvider
     public function boot(CoreContract $core): void
     {
         $core
+            ->getConfig()->layout(\App\MoonShine\Layouts\MoonShineLayout::class);
+
+        $core
             ->resources([
                 MoonShineUserResource::class,
                 MoonShineUserRoleResource::class,

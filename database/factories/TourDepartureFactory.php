@@ -10,7 +10,7 @@ class TourDepartureFactory extends Factory
 {
     public function definition()
     {
-        $departureDate = $this->faker->dateTimeBetween('2025-05-01', '2025-09-01');
+        $departureDate = $this->faker->dateTimeBetween('2026-01-01', '2027-01-01');
         $arrivalDate = (clone $departureDate)->modify('+' . $this->faker->numberBetween(1, 12) . ' hours');
         $returnDate = (clone $departureDate)->modify('+' . $this->faker->numberBetween(3, 14) . ' days');
         $returnArrivalDate = (clone $returnDate)->modify('+' . $this->faker->numberBetween(1, 12) . ' hours');

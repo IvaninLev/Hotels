@@ -13,7 +13,7 @@ const expand = ref(false)
 const tours = computed(() => searchStore.tours)
 const page = ref(1)
 const isFiltered = ref(false)
-
+const isSearched = ref(false)
 
 const totalPages = computed(() => {
     const lastPage = searchStore.toursMeta?.last_page
@@ -88,6 +88,13 @@ const fetchTours = async () => {
         }))
         return
     }
+    if (isSearched.value) {
+        searchStore.setTours(await FilterService.getSearchedTours({
+            ...filters.value,
+            page: page.value
+        }))
+        return
+    }
     searchStore.setTours(await TourService.getToursPage(page.value))
 }
 
@@ -105,11 +112,30 @@ onMounted(async () => {
             ...filters.value,
             ...route.query,
         }
-        isFiltered.value = true
+        isSearched.value = true
+        isFiltered.value = false
     }
     await fetchTours()
 })
 
+watch(
+    () => route.query,
+    async (query) => {
+        const hasQuery = Object.keys(query || {}).length > 0
+        if (hasQuery) {
+            filters.value = {
+                ...filters.value,
+                ...query
+            }
+            isSearched.value = true
+            isFiltered.value = false
+            await setPageAndFetch(1)
+        } else {
+            isSearched.value = false
+            await setPageAndFetch(1)
+        }
+    }
+)
 const applyFilters = async (next) => {
     filters.value = {
         ...filters.value,
@@ -193,7 +219,8 @@ watch(page, async () => {
                     <v-img
                         :src="item.image"
                         height="100%"
-                        min-width="376"
+                        min-width="376pxмо"
+                        max-width="376px"
                         class="image"
                         cover
                     />
@@ -240,7 +267,7 @@ watch(page, async () => {
                     </div>
                     <div class="mt-auto mb-10 pl-10">
                         <div
-                            v-for="f in (item.hotel?.features )"
+                            v-for="f in (item.hotel?.features.slice(0,4) )"
                             :key="f.id"
                             class="d-flex align-center mb-1"
                         >

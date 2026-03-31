@@ -100,7 +100,7 @@ onMounted(async () => {
                 return;
             }
             const ratio = el.scrollLeft / maxScroll;
-            if (ratio < 0.9) {
+            if (ratio > 0.9) {
                 loadHotels();
             }
             thumbLeft.value = ratio * (el.clientWidth - thumbWidth.value);

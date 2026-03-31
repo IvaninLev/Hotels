@@ -11,7 +11,7 @@ class HotelFeaturesSeeder extends Seeder
     public function run()
     {
         Hotel::all()->each(function ($hotel) {
-            HotelFeature::factory()->count(rand(1, 5))->create([
+            HotelFeature::factory()->count(4)->create([
                 'hotel_id' => $hotel->id,
             ]);
         });

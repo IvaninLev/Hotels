@@ -18,7 +18,6 @@ class ReviewFactory extends Factory
             'was_in_hotel' => Hotel::inRandomOrder()->first()->name,
             'main_text' => $this->faker->paragraphs(3, true),
             'person_from' => $this->faker->city(),
-            'avatar' => 'https://i.pravatar.cc/200?img=' . $this->faker->numberBetween(1, 70),
             'flight_to' => $this->faker->city(),
             'rating' => $this->faker->numberBetween(1, 5),
             'flight_date' => $this->faker->date(),

@@ -13,14 +13,14 @@ class HotelFactory extends Factory
     public function definition(): array
     {
         $city = City::inRandomOrder()->first();
-        if (!$city) {
-            throw new \RuntimeException('No cities found. Seed cities before hotels.');
-        }
 
         return [
             'name' => $this->faker->company . ' Hotel',
             'description' => $this->faker->paragraph(),
-            'images' => ['hotels/hotel_1.jpg', 'hotels/hotel_2.jpg', 'hotels/hotel_3.jpg',],
+            'images' => [
+                'app/hotels/hotel_2.jpg',
+                'app/hotels/hotel_3.jpg',
+            ],
             'rating' => $this->faker->randomFloat(1, 3.5, 5.0),
             'address' => $this->faker->address(),
 

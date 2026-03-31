@@ -27,4 +27,11 @@ class NutritionFactory extends Factory
             'is_base' => false,
         ];
     }
+
+    public function base()  : static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_base' => true,
+        ]);
+    }
 }

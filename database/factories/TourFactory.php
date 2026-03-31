@@ -25,11 +25,14 @@ class TourFactory extends Factory
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->text(),
             'persons' => $this->faker->numberBetween(1, 4),
-            'images' => ['tours/tour_1.jpg', 'tours/tour_2.jpg'],
+            'images' => [
+                'app/hotels/hotel_2.jpg',
+                'app/hotels/hotel_3.jpg',
+            ],
             'base_price' => $this->faker->randomFloat(2, 500, 3000),
 
-            'active_from' => $this->faker->time(),
-            'active_to' => $this->faker->time(),
+            'active_from' => $this->faker->dateTimeBetween('2026-01-01', '2027-01-01')->format('Y-m-d H:i:s'),
+            'active_to' => $this->faker->dateTimeBetween('2027-01-01', '2027-12-31')->format('Y-m-d H:i:s'),
 
             'hotel_id' => $hotel->id,
             'country_id' => $countryId,

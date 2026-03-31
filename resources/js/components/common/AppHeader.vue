@@ -59,9 +59,9 @@ onBeforeUnmount(() => {
                       ГОРЯЩИЕ ТУРЫ
                 </span>
 
-                <router-link to="#" class="nav-link mx-4 text-black">
-                    СТРАНЫ
-                </router-link>
+<!--                <router-link to="#" class="nav-link mx-4 text-black">-->
+<!--                    СТРАНЫ-->
+<!--                </router-link>`-->
 
                 <router-link to="/hotels" class="nav-link mx-4 text-black">
                     ОТЕЛИ

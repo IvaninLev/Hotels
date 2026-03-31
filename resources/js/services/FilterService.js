@@ -8,7 +8,7 @@ class FilterService {
 
     async getSearchedTours(params) {
         const response = await axios.get('/api/tours/search', {params});
-        return response.data?.data ?? [];
+        return response.data;
     }
 }
 
