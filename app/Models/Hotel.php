@@ -19,7 +19,6 @@ class Hotel extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'hotel_key',
         'name',
         'price',
         'description',
@@ -34,13 +33,6 @@ class Hotel extends Model
         'features' => 'array',
     ];
 
-
-    protected static function booted()
-    {
-        static::creating(function (Hotel $hotel) {
-            $hotel->hotel_key = Str::random(10);
-        });
-    }
 
     public function roomTypes(): HasMany
     {

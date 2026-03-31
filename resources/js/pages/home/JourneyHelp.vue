@@ -1,8 +1,14 @@
 <script setup>
 import Image from "../../../src/images/mountians.svg"
-
+import {ref} from "vue";
+const activeMenu = ref(null);
+const success = ref(false);
+let successTimer = null;
 const submit = () => {
-    // TODO: hook into form submit once validation logic is added
+    activeMenu.value = null;
+    success.value = true;
+    if (successTimer) clearTimeout(successTimer);
+    successTimer = setTimeout(() => success.value = false, 5000);
 }
 </script>
 

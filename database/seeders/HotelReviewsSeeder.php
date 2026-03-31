@@ -12,7 +12,7 @@ class HotelReviewsSeeder extends Seeder
     {
         Hotel::all()->each(function ($hotel) {
             HotelReview::factory()
-                ->count(rand(5, 15))
+                ->count(200)
                 ->create([
                     'hotel_id' => $hotel->id,
                 ]);

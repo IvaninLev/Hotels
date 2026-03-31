@@ -12,7 +12,7 @@ class RoomTypeSeeder extends Seeder
     {
         Hotel::all()->each(function ($hotel) {
             $rooms = RoomType::factory()
-                ->count(3)
+                ->count(4)
                 ->create([
                     'hotel_id' => $hotel->id,
                 ]);

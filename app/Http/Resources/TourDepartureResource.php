@@ -23,13 +23,16 @@ class   TourDepartureResource extends JsonResource
             'return_city_name' => $this->returnAirport?->city?->name,
             'return_country_name' => $this->returnAirport?->city?->country?->name,
             'airport_id' => $this->airport_id,
-            'departure_date' => $this->departure_date,
-            'arrival_date' => $this->arrival_date,
-            'return_date' => $this->return_date,
-            'return_arrival_date' => $this->return_arrival_date,
+            'departure_date' => $this->departure_date->toDateString(),
+            'arrival_date' => $this->arrival_date->toDateString(),
+            'return_date' => $this->return_date->toDateString(),
+            'departure_time' => $this->departure_date->toTimeString(),
+            'arrival_time' => $this->arrival_date->toTimeString(),
+            'return_time' => $this->return_date->toTimeString(),
+            'return_arrival_time' => $this->return_arrival_date->toTimeString(),
+            'return_arrival_date' => $this->return_arrival_date->toDateString(),
             'night_count' => $this->night_count,
             'dates' =>$this->departure_date->format('d.m.Y') . '-' . $this->return_date->format('d.m.Y'),
-            'debug_dep' => $this->departure_date->toDateString(), // добавь это
 
 
         ];

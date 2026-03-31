@@ -53,8 +53,8 @@ class TourFormPage extends FormPage
 
                 Image::make('Images', 'images')
                     ->multiple()
-                    ->disk(moonshineConfig()->getDisk())
-                    ->dir(moonshineConfig()->getUserAvatarsDir())
+                    ->disk('public')
+                    ->dir('tours')
                     ->allowedExtensions(['jpg', 'png', 'jpeg', 'gif']),
 
                 Date::make('Active from', 'active_from')

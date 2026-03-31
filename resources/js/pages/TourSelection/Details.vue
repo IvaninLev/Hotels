@@ -1,9 +1,12 @@
 <script setup>
 import router from "../../router/index.js";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
+import axios from "axios";
 import TourService from "../../services/TourService.js";
+import BookingService from "../../services/BookingService.js";
 import {useSearchStore} from "../../stores/useSearchStore.js";
+import SuccessModal from "../../components/modals/SuccessModal.vue";
 
 const route = useRoute();
 const tours = ref([]);
@@ -19,6 +22,10 @@ const selectedSchedule = ref(null);
 const selectedDate = ref(null);
 const activeMenu = ref(null);
 const totalTourists = computed(() => adults.value + children.value);
+const submitting = ref(false)
+const success = ref(false)
+
+
 
 const currency = '$';
 const calendarOffers = computed(() => {
@@ -134,9 +141,8 @@ const formatMonth = (value) => {
     return d.toLocaleString('ru-RU', {year: "numeric", month: "long"})
 }
 const formatTime = (value) => {
-    const date = toDate(value);
-    if (!date) return "";
-    return date.toLocaleTimeString("ru-RU", {hour: "2-digit", minute: "2-digit"});
+    return value.slice(0, 5)
+
 };
 
 function formatDateRange(dateString) {
@@ -207,8 +213,8 @@ const roomExtraPrice = computed(() => {
     return 0
 })
 
-const nutritionExtraPrice = computed(() =>{
-    if(selectedNutrition.value) return getExtraPrice(selectedNutrition.value)
+const nutritionExtraPrice = computed(() => {
+    if (selectedNutrition.value) return getExtraPrice(selectedNutrition.value)
     return 0
 })
 
@@ -216,8 +222,8 @@ const finalPrice = computed(() => {
     const pricePerPerson =
         roomExtraPrice.value +
         dateExtraPrice.value +
-        baseTourPrice.value
-        nutritionExtraPrice.value
+        baseTourPrice.value +
+        nutritionExtraPrice.value;
     return pricePerPerson * totalTourists.value
 
 });
@@ -273,6 +279,55 @@ const depPriceDate = (val) => {
     return base + extra;
 }
 
+const currentDeparture = computed(() => {
+    if (selectedDeparture.value) {
+        return selectedDeparture.value;
+    }
+
+    if (dates.value && dates.value.length > 0) {
+        const ymd = normalizeYmd(dates.value[0]);
+        const dep = tours.value?.[0]?.tour_departures.find(
+            d => normalizeYmd(d.departure_date) === ymd
+        );
+        if (dep) return dep;
+    }
+
+    return tours.value?.[0]?.tour_departures?.[0];
+});
+
+const submitBooking = async () => {
+    const tour = tours.value?.[0];
+    if (!tour) return;
+
+    const dep = selectedDeparture.value
+        ? tour.tour_departures.find(d => normalizeYmd(d.departure_date) === normalizeYmd(dates.value[0]))
+        : tour.tour_departures?.[0]
+
+    const payload = {
+        tour_id: tour.id,
+        hotel_id: tour.hotel.id,
+        tour_departure_id: dep.id,
+        room_type_id: selectedRoom.value?.id ?? tour?.hotel?.roomTypes.find(t => t.is_base)?.id ?? null,
+        nutrition_id: selectedNutrition.value?.id ?? tour?.hotel?.nutrition.find(n => n.is_base)?.id ?? null,
+        adults: adults.value,
+        children: children.value,
+        start_date: normalizeYmd(dep?.departure_date ?? dates.value?.[0] ?? null),
+        end_date: normalizeYmd(dep?.return_date ?? null),
+        nights: dep?.night_count ?? null,
+        total_price: finalPrice.value,
+    };
+
+    submitting.value = true;
+    try {
+        await BookingService.sentBooking(payload);
+        activeMenu.value = null;
+    } finally {
+        submitting.value = false;
+        success.value = true
+        window.location.href = '/tour-selection'
+    }
+}
+
 onMounted(async () => {
     const tourId = route.params.id
     const tourData = await TourService.getTour(tourId);
@@ -310,14 +365,14 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <v-expand-x-transition v-for="dep in items.tour_departures">
-                    <v-sheet v-if="activeMenu === 'sched'" class="schedule px-6 py-4" rounded="xl">
+                <v-expand-x-transition>
+                    <v-sheet v-if="activeMenu === 'sched' && currentDeparture" class="schedule px-6 py-4" rounded="xl">
                         <div class="flight-section mb-8">
                             <h4 class="text-uppercase text-grey-darken-1 mb-4">Отправление</h4>
 
                             <div class="flight-row d-flex">
                                 <div class="time-col font-weight-bold text-h6">
-                                    {{ formatTime(dep.departure_date) }}
+                                    {{ formatTime(currentDeparture.departure_time) }}
                                 </div>
                                 <div class="path-col mx-4">
                                     <v-icon size="small" class="plane-icon">mdi-airplane</v-icon>
@@ -326,27 +381,35 @@ onMounted(async () => {
                                 </div>
                                 <div class="info-col">
                                     <div class="font-weight-bold">
-                                        {{ dep.airport.city.name }},{{ dep.airport.airport_name }}
+                                        {{
+                                            currentDeparture.airport.city.name
+                                        }},{{ currentDeparture.airport.airport_name }}
                                     </div>
                                     <div class="text-caption text-grey">
-                                        {{ formatDate(dep.departure_date) }}
+                                        {{ formatDate(currentDeparture.departure_date) }}
                                     </div>
-                                    <div class="text-caption text-grey-lighten-1 mt-1">Enter Air, {{ dep.airport.id }}
+                                    <div class="text-caption text-grey-lighten-1 mt-1">Enter Air,
+                                        {{ currentDeparture.airport.id }}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flight-row d-flex mt-n1">
-                                <div class="time-col font-weight-bold text-h6">{{ formatTime(dep.arrival_date) }}</div>
+                                <div class="time-col font-weight-bold text-h6">
+                                    {{ formatTime(currentDeparture.arrival_time) }}
+                                </div>
                                 <div class="path-col mx-4">
                                     <v-icon size="small" class="plane-icon">mdi-airplane</v-icon>
                                     <div class="dot"></div>
                                 </div>
                                 <div class="info-col">
-                                    <div class="font-weight-bold">{{ dep.return_city_name }},
-                                        {{ dep.return_airport.airport_name }}
+                                    <div class="font-weight-bold">{{ currentDeparture.return_city_name }},
+                                        {{ currentDeparture.return_airport.airport_name }}
                                     </div>
-                                    <div class="text-caption text-grey">{{ formatDate(dep.arrival_date) }}</div>
+                                    <div class="text-caption text-grey">{{
+                                            formatDate(currentDeparture.arrival_date)
+                                        }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -366,26 +429,31 @@ onMounted(async () => {
                             <h4 class="text-uppercase text-grey-darken-1 mb-4">Возвращение</h4>
 
                             <div class="flight-row d-flex">
-                                <div class="time-col font-weight-bold text-h6">{{ formatTime(dep.return_date) }}</div>
+                                <div class="time-col font-weight-bold text-h6">
+                                    {{ formatTime(currentDeparture.return_time) }}
+                                </div>
                                 <div class="path-col mx-4">
                                     <v-icon size="small" class="plane-icon">mdi-airplane</v-icon>
                                     <div class="dot"></div>
                                     <div class="line"></div>
                                 </div>
                                 <div class="info-col">
-                                    <div class="font-weight-bold">{{ dep.return_city_name }},
-                                        {{ dep.return_airport.airport_name }}
+                                    <div class="font-weight-bold">{{ currentDeparture.return_city_name }},
+                                        {{ currentDeparture.return_airport.airport_name }}
                                     </div>
-                                    <div class="text-caption text-grey">{{ formatDate(dep.return_date) }}</div>
+                                    <div class="text-caption text-grey">{{
+                                            formatDate(currentDeparture.return_date)
+                                        }}
+                                    </div>
                                     <div class="text-caption text-grey-lighten-1 mt-1">Enter Air,
-                                        {{ dep.return_airport.id }}
+                                        {{ currentDeparture.return_airport.id }}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flight-row d-flex mt-n1">
                                 <div class="time-col font-weight-bold text-h6">{{
-                                        formatTime(dep.return_arrival_date)
+                                        formatTime(currentDeparture.return_arrival_time)
                                     }}
                                 </div>
                                 <div class="path-col mx-4">
@@ -394,9 +462,13 @@ onMounted(async () => {
                                 </div>
                                 <div class="info-col">
                                     <div class="font-weight-bold">
-                                        {{ dep.airport.city.name }},{{ dep.airport.airport_name }}
+                                        {{
+                                            currentDeparture.airport.city.name
+                                        }},{{ currentDeparture.airport.airport_name }}
                                     </div>
-                                    <div class="text-caption text-grey">{{ formatDate(dep.return_arrival_date) }}</div>
+                                    <div class="text-caption text-grey">
+                                        {{ formatDate(currentDeparture.return_arrival_date) }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -662,7 +734,7 @@ onMounted(async () => {
                                                 items.tour_departures?.[0]?.airport.airport_name
                                             }}</strong>
                                         <span class="option-sub text-caption">({{
-                                                formatTime(items.tour_departures?.[0]?.departure_date)
+                                                formatTime(items.tour_departures?.[0]?.departure_time)
                                             }})</span>
                                     </span>
                                 </label>
@@ -687,7 +759,7 @@ onMounted(async () => {
                                         <strong>{{ dep.city_name }}, {{ dep.airport.airport_name }}</strong>
                                         <span
                                             class="option-sub text-caption">({{
-                                                formatTime(dep.departure_date)
+                                                formatTime(dep.departure_time)
                                             }})</span>
                                     </span>
                                 </label>
@@ -713,7 +785,8 @@ onMounted(async () => {
                         <div class="d-flex justify-center mt-9">
                             <h2 class="text-uppercase text-black "> итог: {{ finalPrice }} $</h2>
                         </div>
-                        <v-btn class="ml-11 text-uppercase" baseColor="red"
+                        <v-btn @click="submitBooking()" :loading="submitting" class="ml-11 text-uppercase"
+                               baseColor="red"
                                style="width: 217px; height: 40px; border-radius: 99px; ">оставить заявку
                             <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
@@ -721,6 +794,7 @@ onMounted(async () => {
 
                 </v-sheet>
             </div>
+            <success-modal v-if="success" @close="success = false"/>
         </v-container>
     </section>
 </template>

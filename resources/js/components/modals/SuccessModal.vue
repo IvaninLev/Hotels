@@ -3,12 +3,6 @@
 import {ref} from "vue";
 
 const emit = defineEmits(['submit', 'close'])
-const form = ref({
-    name: '',
-    number: '',
-})
-
-
 const close = () => emit('close')
 
 const onOverlayClick = (e) => {

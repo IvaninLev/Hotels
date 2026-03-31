@@ -1,12 +1,8 @@
-<script setup>
+    <script setup>
 const links = [
     { text: 'Подбор тура', to: '/tour-selection' },
-    { text: 'Горящие туры', to: '/hot-tours' },
-    { text: 'Страны и отели', to: '/countries' },
-    { text: 'Оплата', to: '/payment' },
     { text: 'Отзывы', to: '/reviews' },
     { text: 'О нас', to: '/about' },
-    { text: 'Контакты', to: '/contacts' },
 ];
 </script>
 

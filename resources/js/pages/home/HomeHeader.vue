@@ -20,30 +20,39 @@ const search = ref({
     tourists: null,
 })
 
-
-const durationDisplay = (computed(() => {
-    if(durationDisplay.value[0] === durationDisplay.value[1]){
-        return `${durationDisplay.value[0]} ночей`
+const durationDisplay = computed(() => {
+    if (durationRange.value[0] === durationRange.value[1]) {
+        return `${durationRange.value[0]} `
     }
-    return `${durationDisplay.value[0]}-${durationDisplay.value[1]} ночей`
-}))
+    return `${durationRange.value[0]}-${durationRange.value[1]}`
+})
 
 const durationDays = computed(() => {
-    const days = 1;
+    const days = []
     for (let i = 1; i <= 30; i++) {
         days.push(i)
     }
     return days
 })
-
-const selectDurationDay = (day) =>{
-    if(!selectingDate.value){
-        durationRange.value = [day,day]
-        selectingDate.value ='end'
-    }else{
-        durationRange.value = [start, day]
+const selectDurationDay = (day) => {
+    if (!selectingDate.value) {
+        durationRange.value = [day, day]
+        selectingDate.value = day
+    } else {
+        const start = selectingDate.value
+        const end = day
+        durationRange.value = start <= end ? [start, end] : [end, start]
+        selectingDate.value = null
     }
-    selectingDate.value = null
+}
+
+const isDayInRange = (day) => {
+    const [min, max] = durationRange.value
+    return day >= min && day <= max
+}
+
+const isDayEdge = (day) => {
+    return day === durationRange.value[0] || day === durationRange.value[1]
 }
 
 const handleSearch = async () => {
@@ -103,8 +112,18 @@ const selectDate = () => {
     if (!dates.value || dates.value.length === 0) return;
     const d = new Date(dates.value[0])
     if (Number.isNaN(d.getTime())) return;
-    search.value.flightDate = d.toLocaleDateString('ru-RU')
+
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+
+    search.value.flightDate = `${year}-${month}-${day}`
     calendar.value = false
+}
+
+const selectNights = () => {
+    search.value.duration = durationDisplay.value
+    nights.value = false
 }
 
 onMounted(async () => {
@@ -171,6 +190,7 @@ onMounted(async () => {
                             </v-col>
                             <v-col cols="2">
                                 <v-text-field
+                                    v-model="search.duration"
                                     bg-color="transparent"
                                     base-color="transparent"
                                     variant="plain"
@@ -211,6 +231,7 @@ onMounted(async () => {
 
             </v-img>
         </v-container>
+
         <v-expand-transition>
             <div v-if="calendar" class="calendar-box">
                 <div class="calendar-top justify-space-between">
@@ -226,7 +247,7 @@ onMounted(async () => {
                             :year="currentMonthParts.year"
                             #day="{props, item}"
                         >
-                            <div class="dep-day" style="">
+                            <div>
                                 <v-btn
                                     v-bind="props" dep-day
                                     :variant="item.isSelected ? 'outlined' : 'text'"
@@ -252,13 +273,12 @@ onMounted(async () => {
                             :year="nextMonthParts.year"
                             #day="{item,props}"
                         >
-                            <div class="dep-day">
+                            <div>
                                 <v-btn
                                     v-bind="props" dep-day
                                     :variant="item.isSelected ? 'outlined' : 'text'"
                                     :color="item.isSelected ? 'primary' : undefined"
                                     class="day-btn"
-                                    style="flex-direction: column;"
                                 >
                                     <div>
                                         <div>{{ item.localized }}</div>
@@ -276,33 +296,29 @@ onMounted(async () => {
                 </div>
             </div>
         </v-expand-transition>
+
         <v-expand-transition>
             <div v-if="nights" class="days-box">
-                <div class="d-flex">
-                    <div class="calendr-month">
-                        <v-date-picker-month
-                            style="border-color: blue;"
-                            color="transparent"
-                            #day="{item}"
-                        >
-                            <div class="dep-day">
-                                <v-btn
-                                    :variant="item.isSelected ? 'outlined' : 'text'"
-                                    :color="item.isSelected ? 'primary' : undefined"
-                                    class="day-btn"
-                                    style="flex-direction: column;"
-                                >
-                                    <div>
-                                        <div>{{ item.localized }}</div>
-                                    </div>
-                                </v-btn>
-                            </div>
-                        </v-date-picker-month>
+                <div class="days-content">
+                    <div class="days-grid-container">
+                        <div class="day">
+                            <v-btn
+                                v-for="day in durationDays"
+                                :key="day"
+                                :variant="isDayEdge(day) ? 'outlined' : isDayInRange(day) ? 'tonal' : 'text'"
+                                :color="isDayInRange(day) ? 'primary' : undefined"
+                                class="day-btn"
+                                @click="selectDurationDay(day)"
+                            >
+                                {{ day }}
+                            </v-btn>
+                        </div>
                     </div>
                 </div>
+
                 <v-divider class="mt-5"></v-divider>
                 <div class="calendar-footer">
-                    <v-btn @click="selectDate()" class="apply-btn">выбрать
+                    <v-btn @click="selectNights()" class="apply-btn">выбрать
                         <v-icon> mdi-arrow-bottom-right</v-icon>
                     </v-btn>
                 </div>
@@ -310,7 +326,8 @@ onMounted(async () => {
         </v-expand-transition>
     </section>
 </template>
-<style>>
+
+<style scoped>
 .apply-btn {
     margin-left: 70px;
     width: 144px;
@@ -353,7 +370,19 @@ onMounted(async () => {
     padding: 20px;
     z-index: 20;
     transform: translateY(-335px) translateX(680px);
-    width: auto;
+    width: 520px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.days-content {
+    padding: 10px;
+}
+
+
+.day-number-btn.v-btn--variant-outlined {
+    border-width: 2px;
+    border-color: #463998;
 }
 
 .calendar-top {
@@ -362,13 +391,10 @@ onMounted(async () => {
     gap: 12px;
 }
 
-
 .calendar-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 22px;
 }
-
-
 </style>

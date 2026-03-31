@@ -12,7 +12,7 @@ class AirportsSeeder extends Seeder
     {
         City::inRandomOrder()->take(10)->get()->each(function ($city) {
             Airport::factory()
-                ->count(2)
+                ->count(2000)
                 ->create([
                     'city_id' => $city->id,
                 ]);

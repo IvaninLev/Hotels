@@ -21,8 +21,8 @@ return new class extends Migration {
 
             $table->date('flight_date')->nullable();
 
-            $table->foreignId('tour_id')->constrained('tours')->cascadeOnDelete();
-
+            $table->json('avatar');
+            $table->text('was_in_hotel');
             $table->timestamps();
         });
     }

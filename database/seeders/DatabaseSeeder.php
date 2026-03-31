@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Http\Resources\TourDepartureResource;
-use Database\Factories\TourReviewFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class   DatabaseSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
@@ -16,10 +14,22 @@ class   DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $seeders = [
-            ReviewSeeder::class,
-        ];
-        $this->call($seeders);
-    }
+        $this->call([
+            CountryCitySeeder::class,
+            AirportsSeeder::class,
 
+            HotelsSeeder::class,
+            RoomTypeSeeder::class,
+            NutritionSeeder::class,
+            HotelFeaturesSeeder::class,
+            HotelReviewsSeeder::class,
+
+            ToursSeeder::class,
+            TourDepartureSeeder::class,
+
+            ReviewSeeder::class,
+            NewsSeeder::class,
+            MoonShineAdminSeeder::class,
+        ]);
+    }
 }

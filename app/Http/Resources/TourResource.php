@@ -27,10 +27,10 @@ class TourResource extends JsonResource
             'country' => $this->country?->name,
             'city' => $this->city?->name,
 
-            'date' => optional($this->tourDepartures->first()?->departure_date)->format('d.m.Y')
-                . '-' . optional($this->tourDepartures->first()?->return_date)->format('d.m.Y'),
-            'season' => $this->tourDepartures->first()?->departure_date->format('d.m.Y'),
+            'date' => $this->active_from->format('d.m.Y')
+                . ' - ' . $this->active_to->format('d.m.Y'),
 
+            'season' => $this->active_from->format('d.m.Y'),
 
             'days' => $hasDates
                 ? $this->active_from->diffInDays($this->active_to)

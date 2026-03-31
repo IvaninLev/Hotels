@@ -52,8 +52,8 @@ class HotelFormPage extends FormPage
 
             Image::make('Images', 'images')
                 ->multiple()
-                ->disk(moonshineConfig()->getDisk())
-                ->dir(moonshineConfig()->getUserAvatarsDir())
+                ->disk('public')
+                ->dir('hotels')
                 ->allowedExtensions(['jpg', 'png', 'jpeg', 'gif']),
 
             Text::make('Address', 'address')

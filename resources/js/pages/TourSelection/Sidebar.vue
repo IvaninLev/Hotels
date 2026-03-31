@@ -14,6 +14,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'apply', 'clear'])
+
 const slider = ref([3, 20])
 const showMore = ref(false)
 const amenities = ref([])
@@ -23,12 +24,10 @@ const season = ref(null)
 const foodType = ref(null)
 const minRating = ref('any')
 
-
-
 const applyFilters = () => {
     emit('apply', {
         searchQuery: searchQuery.value,
-        duration: [...slider.value],
+        duration: [slider.value],
         amenities: [...amenities.value],
         priceType: priceType.value,
         season: season.value,
@@ -37,14 +36,14 @@ const applyFilters = () => {
     })
 }
 const clearFilters = () => {
-        slider.value = [3, 20]
-        showMore.value = false
-        amenities.value = []
-        searchQuery.value = ''
-        priceType.value = 'One'
-        offerType.value = null
-        foodType.value = null
-        minRating.value = 'any'
+    slider.value = [3, 20]
+    showMore.value = false
+    amenities.value = []
+    searchQuery.value = ''
+    priceType.value = 'one'
+    foodType.value = null
+    season.value = null
+    minRating.value = 'any'
     emit('clear')
 
 }
