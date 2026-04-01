@@ -1,5 +1,6 @@
 <script setup>
 import {ref, onMounted, onBeforeUnmount} from "vue";
+import { useI18n } from "vue-i18n";
 import HotelService from "../../services/HotelService.js";
 import TourService from "../../services/TourService.js";
 
@@ -14,6 +15,7 @@ const loading = ref(false);
 
 
 const scrollInterval = ref(null);
+const { t } = useI18n({ useScope: 'global' })
 
 async function loadHotels() {
     if (loading.value) return;
@@ -114,11 +116,11 @@ onBeforeUnmount(() => stopScroll());
             <div class="mt-16" align="center">
                 <div class="decorative-text">Hotels</div>
                 <v-card-title class="custom-title pt-16 text-md-h5 text-lg-h4">
-                    <strong class="">ПОПУЛЯРНЫЕ ОТЕЛИ</strong>
+                    <strong class="">{{ t('home.hotelsTitle') }}</strong>
                 </v-card-title>
 
                 <v-card-text class="custom-subtext">
-                    УЮТ И РОСКОШЬ В ЛУЧШИХ ОТЕЛЯХ МИРА
+                    {{ t('home.hotelsSubtitle') }}
                 </v-card-text>
 
                 <v-hover v-slot="{ isHovering, props }">
@@ -163,7 +165,7 @@ onBeforeUnmount(() => stopScroll());
                                     <div class="d-flex align-center mt-2">
                                         <router-link :to="tourLink(h)" class="nav-link"
                                                      :class="{'disabled-link': !hasTour(h)}">
-                                            Узнать подробнее
+                                            {{ t('home.learnMore') }}
                                         </router-link>
                                         <v-icon size="20">mdi-arrow-right-circle-outline</v-icon>
                                     </div>

@@ -1,6 +1,8 @@
 <script setup>
 import Desert from '../../../src/images/desert.svg'
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
@@ -19,26 +21,23 @@ import Desert from '../../../src/images/desert.svg'
                 >
                     <v-row align="center" justify="space-between" no-gutters>
                         <div class="text-h5 ">
-                            не определились<br/>
-                            <span class="font-italic">с выбором?</span>
+                            {{ t('home.choiceTitle') }}
                         </div>
 
                         <div>
-                            Оставьте свой номер <br/>
-                            и наш специалист поможет <br/>
-                            вам с подбором тура
+                            {{ t('home.choiceSubtitle') }}
                         </div>
 
                         <v-col class="d-flex flex-column align-end " cols="auto">
                             <v-text-field
-                                placeholder="Имя"
+                                :placeholder="t('home.name')"
                                 variant="underlined"
                                 density="compact"
                                 hide-details
                                 style="width: 144px"
                             />
                             <v-text-field
-                                placeholder="Телефон"
+                                :placeholder="t('home.phone')"
                                 variant="underlined"
                                 density="compact"
                                 hide-details
@@ -50,7 +49,7 @@ import Desert from '../../../src/images/desert.svg'
                             variant="flat"
                             class="rounded-pill px-6"
                         >
-                            ОТПРАВИТЬ
+                            {{ t('home.send') }}
                             <v-icon icon="mdi-arrow-bottom-right"></v-icon>
                         </v-btn>
 

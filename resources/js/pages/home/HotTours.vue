@@ -1,5 +1,6 @@
 <script setup>
 import {ref, onMounted} from 'vue';
+import { useI18n } from "vue-i18n";
 import TourService from '../../services/TourService.js';
 import ReviewsService from "../../services/ReviewsService.js";
 
@@ -11,6 +12,7 @@ const scrollInterval = ref(60);
 const loading = ref(false);
 const lastPage = ref(null);
 const page = ref(1)
+const { t } = useI18n({ useScope: 'global' })
 
 async function loadTours() {
     if (loading.value) return;
@@ -86,10 +88,10 @@ onMounted(async () => {
     <section class="hot-tours">
         <v-container>
             <v-card-title class="text-h6 text-md-h5 text-lg-h4">
-                <strong>ГОРЯЩИЕ ТУРЫ</strong>
+                <strong>{{ t('home.hotToursTitle') }}</strong>
             </v-card-title>
-            <v-card-text>ПОЙМАЙТЕ МОМЕНТ</v-card-text>
-                <div class="decorative-text">Tours</div>
+            <v-card-text>{{ t('home.hotToursSubtitle') }}</v-card-text>
+                <div class="decorative-text">{{ t('home.hotToursTitle') }}</div>
             <v-hover v-slot="{ isHovering, props }">
                 <div class="scroll-wrapper" v-bind="props">
                     <v-btn class="arrows left-arrow mdi mdi-chevron-left" :class="{'show-arrow' : isHovering}"
@@ -100,13 +102,13 @@ onMounted(async () => {
                     <div class="scroll mt-16" ref="scrollEl">
 
                         <v-sheet
-                            v-for="t in tours"
-                            :key="t.id"
+                            v-for="tour in tours"
+                            :key="tour.id"
                             class="tour"
                             height="340"
                         >
                             <v-img
-                                :src="t.image"
+                                :src="tour.image"
                                 cover
                                 class="tour-bg"
                             />
@@ -114,24 +116,24 @@ onMounted(async () => {
                             <div class="tour-content">
                                 <div class="d-flex">
                                     <v-chip outlined color="white">
-                                        {{ t.days }} {{ [1, 2, 3, 4].includes(t.days) ? 'дня' : 'дней' }}
+                                        {{ tour.days }} {{ t('home.daysShort') }}
                                     </v-chip>
                                     <v-chip outlined color="white">
-                                        ОТ {{ t.base_price }}₽
+                                        {{ t('home.from') }} {{ tour.base_price }}₽
                                     </v-chip>
                                 </div>
 
-                                <div class="text-white mt-auto">
-                                    <div class="text-h6 font-weight-bold">
-                                        {{ t.country }} • {{ t.city }}
-                                    </div>
-                                    <div class="text-subtitle-2 font-weight-medium">
-                                        {{ t.date }}
-                                    </div>
+                                    <div class="text-white mt-auto">
+                                        <div class="text-h6 font-weight-bold">
+                                            {{ tour.country }} • {{ tour.city }}
+                                        </div>
+                                        <div class="text-subtitle-2 font-weight-medium">
+                                            {{ tour.date }}
+                                        </div>
 
                                     <div class="d-flex align-center mt-2">
-                                        <router-link :to="`/tour/${t.id}`" class="nav-link">
-                                            Узнать подробнее
+                                        <router-link :to="`/tour/${tour.id}`" class="nav-link">
+                                            {{ t('home.learnMore') }}
                                         </router-link>
                                         <v-icon size="20">mdi-arrow-right-circle-outline</v-icon>
                                     </div>

@@ -1,6 +1,9 @@
 <script setup>
 import Image from "../../../src/images/mountians.svg"
 import {ref} from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n({ useScope: 'global' })
 const activeMenu = ref(null);
 const success = ref(false);
 let successTimer = null;
@@ -22,25 +25,23 @@ const submit = () => {
             >
                 <v-row align="center" justify="space-between" no-gutters>
                     <div class="text-h5 w-25">
-                        МЫ ПОМОЖЕМ СОЗДАТЬ ВАШЕ ПУТЕШЕСТВИЕ
+                        {{ t('home.journeyHelpTitle') }}
                     </div>
 
                     <div>
-                        Оставьте свой номер <br/>
-                        и наш специалист поможет <br/>
-                        вам с подбором тура
+                        {{ t('home.journeyHelpSubtitle') }}
                     </div>
 
                     <v-col class="d-flex flex-column align-end" cols="auto">
                         <v-text-field
-                            placeholder="Имя"
+                            :placeholder="t('home.name')"
                             variant="underlined"
                             density="compact"
                             hide-details
                             style="width: 144px"
                         />
                         <v-text-field
-                            placeholder="Телефон"
+                            :placeholder="t('home.phone')"
                             variant="underlined"
                             density="compact"
                             hide-details
@@ -53,7 +54,7 @@ const submit = () => {
                         class="rounded-pill px-6"
                         @click="submit"
                     >
-                        ОТПРАВИТЬ
+                        {{ t('home.send') }}
                         <v-icon icon="mdi-arrow-bottom-right"></v-icon>
                     </v-btn>
 
