@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import ReviewsService from "../../services/ReviewsService.js";
 
 
@@ -10,6 +11,7 @@ const reviews = ref([]);
 const page = ref(1);
 const lastPage = ref(null);
 const loading = ref(false);
+const { t } = useI18n({ useScope: 'global' })
 
 async function loadReviews() {
     if (loading.value) return;
@@ -62,10 +64,10 @@ onMounted(async () => {
             <div class="mt-16" align="center">
                 <div class="decorative-text">Reviews</div>
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4">
-                    <strong>ОТЗЫВЫ</strong>
+                    <strong>{{ t('home.reviewsTitle') }}</strong>
                 </v-card-title>
 
-                <v-card-text>ВПЕЧАТЛЕНИЯ НАШИХ ПУТЕШЕСТВЕННИКОВ</v-card-text>
+                <v-card-text>{{ t('home.reviewsSubtitle') }}</v-card-text>
                 <v-hover v-slot="{isHovering, props}">
                     <div class="scroll-wrapper" v-bind="props">
                         <v-btn class="arrows left-arrow mdi mdi-chevron-left" :class="{'show-arrow' : isHovering}"

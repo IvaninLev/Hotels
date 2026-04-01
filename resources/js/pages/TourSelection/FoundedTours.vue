@@ -1,11 +1,13 @@
 <script setup>
-import {computed, onMounted, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch, watchEffect} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import TourService from "../../services/TourService.js";
 import FilterService from "../../services/FilterService.js";
 import Sidebar from "./Sidebar.vue";
 import {useSearchStore} from "../../stores/useSearchStore.js";
+import {useI18n} from "vue-i18n";
 
+const { t, tm } = useI18n({ useScope: 'global' })
 const searchStore = useSearchStore();
 const route = useRoute()
 const router = useRouter()
@@ -14,14 +16,18 @@ const tours = computed(() => searchStore.tours)
 const page = ref(1)
 const isFiltered = ref(false)
 const isSearched = ref(false)
-const sortOptions = [
-    {value: 'recommended', label: 'Рекомендации'},
-    {value: 'price_asc', label: 'Низшая цена'},
-    {value: 'rating_desc', label: 'Высший рейтинг'},
-    {value: 'latest', label: 'Последний'}
-]
-const selectedSort = ref(sortOptions[0])
+const sortOptions = computed(() => {
+    const options = tm('tour.sortOptions') ?? {}
+    return Object.entries(options).map(([value, label]) => ({ value, label }))
+})
+const selectedSort = ref(null)
 const sort = ref(false)
+
+watchEffect(() => {
+    if (!selectedSort.value && sortOptions.value.length) {
+        selectedSort.value = sortOptions.value[0]
+    }
+})
 
 
 const totalPages = computed(() => {
@@ -144,8 +150,8 @@ watch(
                 ...filters.value,
                 ...query
             }
-            const matchedSort = sortOptions.find(o => o.value === query.sort)
-            selectedSort.value = matchedSort ?? sortOptions[0]
+            const matchedSort = sortOptions.value.find(o => o.value === query.sort)
+            selectedSort.value = matchedSort ?? sortOptions.value?.[0]
             isSearched.value = true
             isFiltered.value = false
             await setPageAndFetch(1)
@@ -193,13 +199,13 @@ watch(page, async () => {
     <section class="foundedOptions">
         <v-container>
             <div class="breadcrumbs">
-                <span class="crumb" @click="goHome">Главная</span>
+                <span class="crumb" @click="goHome">{{ t('nav.home') }}</span>
                 <span class="divider">/</span>
                 <span class="crumb active">{{ currentLabel }}</span>
             </div>
             <v-card-title class="flex d-flex">
-                <h2>НАЙДЕНЫЕ ВАРИАНТЫ</h2>
-                <v-card-subtitle class="pt-5">({{ totalToursCount }} предложений)</v-card-subtitle>
+                <h2>{{ t('tour.foundTitle') }}</h2>
+                <v-card-subtitle class="pt-5">({{ t('tour.offers',{count: totalToursCount}) }})</v-card-subtitle>
             </v-card-title>
             <div class="d-flex justify-space-between align-center w-100">
 
@@ -207,8 +213,8 @@ watch(page, async () => {
                     <v-btn variant="text" @click="sort = !sort">
                         <v-icon icon="mdi-sort-variant" class="mr-2"></v-icon>
                         <v-card-subtitle class="variant" \>
-                            Сортировать: <strong
-                            class="text-black">{{ selectedSort?.label ?? sortOptions[0].label }}</strong>
+                            {{ t('tour.sort') }}: <strong
+                            class="text-black">{{ selectedSort?.label ?? sortOptions[0]?.label }}</strong>
                         </v-card-subtitle>
                     </v-btn>
                 </div>
@@ -286,17 +292,17 @@ watch(page, async () => {
                             <span class="text-body-2">отзывов</span>
                         </div>
 
-                        <div class="mt-9">
-                            <div class="d-flex align-center mb-2">
-                                <v-icon size="small" class="mr-2">mdi-calendar</v-icon>
-                                <span class="text-body-2">{{ item.date }} ({{ item.days }} дней)</span>
-                            </div>
-                            <div>
-                                <v-icon size="small" class="mr-2">mdi-silverware-fork-knife</v-icon>
-                                <span class="text-body-2">{{ item?.hotel?.nutrition.find(n => n.is_base)?.name }}</span>
-                            </div>
+                <div class="mt-9">
+                    <div class="d-flex align-center mb-2">
+                        <v-icon size="small" class="mr-2">mdi-calendar</v-icon>
+                        <span class="text-body-2">{{ item.date }} ({{ item.days }} {{t('tour.days')}})</span>
+                    </div>
+                    <div>
+                        <v-icon size="small" class="mr-2">mdi-silverware-fork-knife</v-icon>
+                        <span class="text-body-2">{{ item?.hotel?.nutrition.find(n => n.is_base)?.name }}</span>
+                    </div>
 
-                        </div>
+                </div>
 
 
                     </div>
@@ -324,7 +330,7 @@ watch(page, async () => {
                         <div class="">
                             <div class="flex d-flex text-right">
                                 <div class="text-h4 font-weight-bold mb-1">{{ item.base_price }}$</div>
-                                <div class="text-caption text-grey pt-4">/ за 1</div>
+                                <div class="text-caption text-grey pt-4">{{ t('tour.priceSuffix') }}</div>
                             </div>
                             <v-btn
                                 color="base-red"
@@ -334,7 +340,7 @@ watch(page, async () => {
                                 :to="`/tour/${item.id}`"
                                 block
                             >
-                                ПОДРОБНЕЕ
+                                {{ t('tour.readMore')}}
                                 <v-icon end>mdi-arrow-bottom-right</v-icon>
                             </v-btn>
                         </div>

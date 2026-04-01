@@ -1,8 +1,10 @@
 <script setup>
 import {ref, onMounted} from "vue";
+import { useI18n } from "vue-i18n";
 import NewsService from "../../services/NewsService.js";
 
 const news = ref([])
+const { t } = useI18n({ useScope: 'global' })
 
 onMounted(async () => {
     news.value = await NewsService.getNews();
@@ -13,8 +15,8 @@ onMounted(async () => {
     <v-container fluid class="py-16 px-6 " style="background-color: #F8F8F8;">
         <div class="text-center mb-12 position-relative">
             <div class="decorative-text">News</div>
-            <h2 class="text-h3 font-weight-bold mb-2">НОВОСТИ</h2>
-            <p class="text-subtitle-1 text-grey-darken-1">СОБЫТИЯ В МИРЕ ТУРИЗМА</p>
+            <h2 class="text-h3 font-weight-bold mb-2">{{ t('home.newsTitle') }}</h2>
+            <p class="text-subtitle-1 text-grey-darken-1">{{ t('home.newsSubtitle') }}</p>
         </div>
 
         <v-row dense class="news-grid">
@@ -41,7 +43,7 @@ onMounted(async () => {
                                 {{ n.title }}
                             </div>
                             <div class="read-more text-white">
-                                читать →
+                                {{ t('home.readArrow') }}
                             </div>
                         </div>
                     </v-img>

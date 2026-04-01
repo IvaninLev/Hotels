@@ -1,6 +1,7 @@
 <script setup>
 import midnightImg from '../../../src/images/midnight.svg'
 import {computed, onMounted, ref} from "vue";
+import { useI18n } from "vue-i18n";
 import FilterService from "../../services/FilterService.js";
 import router from "../../router/index.js";
 
@@ -19,6 +20,8 @@ const search = ref({
     duration: null,
     tourists: null,
 })
+
+const { t } = useI18n({ useScope: 'global' })
 
 const durationDisplay = computed(() => {
     if (durationRange.value[0] === durationRange.value[1]) {
@@ -146,8 +149,8 @@ onMounted(async () => {
         >
             <v-img :src="midnightImg" align="center" cover width="100%">
                 <div class="text-white mb-6 w-75 mt-16">
-                    <h1 class="text-hero-heading font-weight-bold mb-2">ПУТЕШЕСТВИЯ МЕЧТЫ</h1>
-                    <h2 class="text-h6">ВЫБЕРИ СВОЮ</h2>
+                    <h1 class="text-hero-heading font-weight-bold mb-2">{{ t('home.heroTitle') }}</h1>
+                    <h2 class="text-h6">{{ t('home.heroSubtitle') }}</h2>
                 </div>
                 <v-card class="rounded-pill mt-16" width="930">
                     <v-container class="pa-0">
@@ -159,7 +162,7 @@ onMounted(async () => {
                                     base-color="transparent"
                                     variant="plain"
                                     density="compact"
-                                    label="Откуда"
+                                    :label="t('home.from')"
                                     class="border-e-sm"
                                 ></v-text-field>
                             </v-col>
@@ -170,7 +173,7 @@ onMounted(async () => {
                                     base-color="transparent"
                                     variant="plain"
                                     density="compact"
-                                    label="Куда"
+                                    :label="t('home.to')"
                                     class="px-1 border-e-sm"
                                 ></v-text-field>
                             </v-col>
@@ -181,7 +184,7 @@ onMounted(async () => {
                                     base-color="transparent"
                                     variant="plain"
                                     density="compact"
-                                    label="Вылет"
+                                    :label="t('home.departure')"
                                     class="px-1 border-e-sm"
                                     readonly
                                     @click="calendar = !calendar"
@@ -195,7 +198,7 @@ onMounted(async () => {
                                     base-color="transparent"
                                     variant="plain"
                                     density="compact"
-                                    label="На сколько"
+                                    :label="t('home.duration')"
                                     class="px-1 border-e-sm"
                                     readonly
                                     @click="nights = !nights"
@@ -210,7 +213,7 @@ onMounted(async () => {
                                     variant="plain"
                                     type="number"
                                     density="compact"
-                                    label="Туристы"
+                                    :label="t('home.tourists')"
                                     class="px-1 border-e-sm"
                                 ></v-text-field>
                             </v-col>
@@ -221,7 +224,7 @@ onMounted(async () => {
                                     class="text-white rounded-pill mb-3"
                                     block
                                 >
-                                    ПОДОБРАТЬ
+                                    {{ t('home.pick') }}
                                     <v-icon icon="mdi-arrow-bottom-right"></v-icon>
                                 </v-btn>
                             </v-col>
@@ -290,7 +293,7 @@ onMounted(async () => {
                 </div>
                 <v-divider class="mt-5"></v-divider>
                 <div class="calendar-footer">
-                    <v-btn @click="selectDate()" class="apply-btn">выбрать
+                    <v-btn @click="selectDate()" class="apply-btn">{{ t('home.pick') }}
                         <v-icon> mdi-arrow-bottom-right</v-icon>
                     </v-btn>
                 </div>
@@ -318,7 +321,7 @@ onMounted(async () => {
 
                 <v-divider class="mt-5"></v-divider>
                 <div class="calendar-footer">
-                    <v-btn @click="selectNights()" class="apply-btn">выбрать
+                    <v-btn @click="selectNights()" class="apply-btn">{{ t('home.pick') }}
                         <v-icon> mdi-arrow-bottom-right</v-icon>
                     </v-btn>
                 </div>
