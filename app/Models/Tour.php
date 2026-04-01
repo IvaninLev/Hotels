@@ -56,9 +56,9 @@ class Tour extends Model
         return $this->belongsTo(Nutrition::class);
     }
 
-    public function nutrition(): BelongsTo
+    public function nutrition(): HasMany
     {
-        return $this->belongsTo(Nutrition::class);
+        return $this->hasMany(Nutrition::class);
     }
 
     public function baseRoomType(): BelongsTo

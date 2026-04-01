@@ -14,6 +14,15 @@ const tours = computed(() => searchStore.tours)
 const page = ref(1)
 const isFiltered = ref(false)
 const isSearched = ref(false)
+const sortOptions = [
+    {value: 'recommended', label: 'Рекомендации'},
+    {value: 'price_asc', label: 'Низшая цена'},
+    {value: 'rating_desc', label: 'Высший рейтинг'},
+    {value: 'latest', label: 'Последний'}
+]
+const selectedSort = ref(sortOptions[0])
+const sort = ref(false)
+
 
 const totalPages = computed(() => {
     const lastPage = searchStore.toursMeta?.last_page
@@ -84,6 +93,7 @@ const fetchTours = async () => {
     if (isFiltered.value) {
         searchStore.setTours(await FilterService.getFilteredTours({
             ...filters.value,
+            sort: selectedSort.value?.value,
             page: page.value
         }))
         return
@@ -91,11 +101,12 @@ const fetchTours = async () => {
     if (isSearched.value) {
         searchStore.setTours(await FilterService.getSearchedTours({
             ...filters.value,
+            sort: selectedSort.value?.value,
             page: page.value
         }))
         return
     }
-    searchStore.setTours(await TourService.getToursPage(page.value))
+    searchStore.setTours(await TourService.getToursPage(page.value, selectedSort.value?.value))
 }
 
 const setPageAndFetch = async (nextPage) => {
@@ -105,6 +116,12 @@ const setPageAndFetch = async (nextPage) => {
     }
     page.value = nextPage
 }
+const selectSort = async (option) => {
+    selectedSort.value = option
+    sort.value = false
+    await setPageAndFetch(1)
+}
+
 
 onMounted(async () => {
     if (Object.keys(route.query || {}).length) {
@@ -127,6 +144,8 @@ watch(
                 ...filters.value,
                 ...query
             }
+            const matchedSort = sortOptions.find(o => o.value === query.sort)
+            selectedSort.value = matchedSort ?? sortOptions[0]
             isSearched.value = true
             isFiltered.value = false
             await setPageAndFetch(1)
@@ -185,12 +204,14 @@ watch(page, async () => {
             <div class="d-flex justify-space-between align-center w-100">
 
                 <div class="d-flex pl-3x">
-                    <v-icon icon="mdi-sort-variant" class="mr-2"></v-icon>
-                    <v-card-subtitle class="variant">
-                        Сортировать: <strong class="text-black">рекомендации для вас</strong>
-                    </v-card-subtitle>
+                    <v-btn variant="text" @click="sort = !sort">
+                        <v-icon icon="mdi-sort-variant" class="mr-2"></v-icon>
+                        <v-card-subtitle class="variant" \>
+                            Сортировать: <strong
+                            class="text-black">{{ selectedSort?.label ?? sortOptions[0].label }}</strong>
+                        </v-card-subtitle>
+                    </v-btn>
                 </div>
-
                 <div class="d-flex pr-16">
                     <v-btn variant="text" class="d-flex align-center">
                         <v-icon start color="base-gray">mdi-earth</v-icon>
@@ -206,6 +227,20 @@ watch(page, async () => {
             </div>
 
             <div>
+                <v-expand-transition>
+                    <v-sheet v-if="sort" width="260px" rounded="xl" position="absolute" style="z-index: 2">
+                        <v-list density="compact" rounded="xl">
+                            <v-list-item
+                                v-for="option in sortOptions"
+                                :key="option.value"
+                                @click="selectSort(option)"
+                            >
+                                <v-list-item-title class="mb-3">{{ option.label }}</v-list-item-title>
+                                <v-divider></v-divider>
+                            </v-list-item>
+                        </v-list>
+                    </v-sheet>
+                </v-expand-transition>
                 <v-sheet
                     v-for="item in tours"
                     :key="item.id"
@@ -219,7 +254,7 @@ watch(page, async () => {
                     <v-img
                         :src="item.image"
                         height="100%"
-                        min-width="376pxмо"
+                        min-width="376px"
                         max-width="376px"
                         class="image"
                         cover
