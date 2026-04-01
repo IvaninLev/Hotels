@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaginationEnum;
 use App\Http\Resources\TourResource;
+use App\Models\Hotel;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,17 +12,30 @@ use Illuminate\Support\Facades\DB;
 class ToursController extends Controller
 {
 
-    public function index()
+    private function applySorting($query, ?string $sort): void
     {
-        $tours = Tour::with([
+        match ($sort) {
+            'price_asc' => $query->orderBy('base_price'),
+            'rating_desc' => $query->orderByDesc(
+                Hotel::select('rating')->whereColumn('hotels.id', 'tours.hotel_id')
+            ),
+            'latest' => $query->orderByDesc('active_from'),
+            default => $query->orderByDesc('id'),
+        };
+    }
+
+    public function index(Request $request)
+    {
+        $query = Tour::with([
             'hotel',
             'tourDepartures',
             'tourDepartures.airport.city.country',
             'tourDepartures.returnAirport.city.country',
             'baseTourDeparture.airport',
             'baseTourDeparture.returnAirport',
-        ])
-            ->paginate(PaginationEnum::PAGE_SIZE->value);
+        ]);
+        $this->applySorting($query, $request->get('sort'));
+        $tours = $query->paginate(PaginationEnum::PAGE_SIZE->value);
         return TourResource::collection($tours);
     }
 
@@ -106,8 +120,7 @@ class ToursController extends Controller
 
         $query->when($request->foodType, function ($q, $code) {
             $q->where(function ($q) use ($code) {
-                $q->whereHas('baseNutrition', fn($q) => $q->where('code', $code))
-                    ->orWhereHas('hotel.nutrition', fn($q) => $q->where('code', $code));
+                $q->WhereHas('hotel.nutrition', fn($q) => $q->where('code', $code));
             });
         });
 
@@ -119,6 +132,8 @@ class ToursController extends Controller
                 });
             }
         });
+
+        $this->applySorting($query, $request->get('sort'));
 
         $tours = $query->paginate(PaginationEnum::PAGE_SIZE->value);
 
@@ -163,7 +178,7 @@ class ToursController extends Controller
                 $q->whereHas('tourDepartures', function ($q) use ($min, $max) {
                     $q->whereBetween('night_count', [(int)$min, (int)$max]);
                 });
-            }else{
+            } else {
                 $q->whereHas('tourDepartures', function ($q) use ($duration) {
                     $q->where('night_count', '>=', (int)$duration);
                 });
@@ -177,6 +192,8 @@ class ToursController extends Controller
                     ->orWhere('persons', '>=', (int)$persons);
             });
         }
+
+        $this->applySorting($query, $request->get('sort'));
 
         $tours = $query->paginate(PaginationEnum::PAGE_SIZE->value);
         return TourResource::collection($tours);

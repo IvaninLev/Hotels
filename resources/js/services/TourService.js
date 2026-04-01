@@ -1,4 +1,4 @@
- import axios from "axios";
+import axios from "axios";
 
 class TourService {
     async getTours() {
@@ -6,8 +6,8 @@ class TourService {
         return response.data.data;
     }
 
-    async getToursPage(page = 1) {
-        const response = await axios.get('/api/tours', {params: {page}});
+    async getToursPage(page = 1, sort = null) {
+        const response = await axios.get('/api/tours', {params: {page, sort}});
         return response.data;
     }
 
