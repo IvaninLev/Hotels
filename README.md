@@ -1,62 +1,69 @@
 HotelsSearch — Full-Stack Tour Booking Platform
-A high-performance SPA for searching and booking holiday packages. Built with a focus on Clean Architecture (Service Layer) and seamless developer experience.
+A high-performance Single Page Application (SPA) for discovering and booking holiday packages. Engineered with Clean Architecture principles, a dedicated Service Layer, and a streamlined Developer Experience (DX).
 
 🚀 Tech Stack
-Backend: PHP 8.3, Laravel 11 (Service Layer, API Resources, Sanctum)
+Backend: PHP 8.4 (Sail runtime), Laravel 12, API Resources, Sanctum (Auth)
 
-Frontend: Vue 3 (Composition API), Pinia, Vuetify 3, Vite
+Frontend: Vue 3 (Composition API), Pinia (State Management), Vuetify 3, Vite
 
-Database: MySQL 8, Redis (Cache/Session Management)
+Database: MySQL 8, Redis (Caching & Sessions)
 
-Infrastructure: Docker (Laravel Sail), Mailpit, phpMyAdmin
+Infrastructure: Docker (Laravel Sail), Mailpit (SMTP Testing), phpMyAdmin
 
-Admin Suite: MoonShine (RBAC, Content Management)
+Admin Panel: MoonShine (RBAC, Content Management)
 
 🛠 Key Architectural Features
-Service Layer Pattern: Business logic (filtering, searching, booking) is decoupled from Controllers into dedicated Service classes for better maintainability and testing.
+Service Layer Pattern: Business logic for search, filtering, and booking is decoupled from controllers and encapsulated in app/Services (e.g., TourService).
 
-Advanced Filtering: Complex Eloquent queries for price ranges, hotel ratings, flight durations, and meal plans.
+Advanced Filtering: Complex Eloquent queries handling price ranges, hotel ratings, flight durations, nutrition types, and amenities.
 
-Reactive SPA: Smooth user experience with Vue 3 and centralized state management via Pinia.
+Reactive SPA: Seamless UX powered by Vue 3 + Pinia for centralized state synchronization.
 
-Internationalization: Full RU/EN support using vue-i18n.
+Internationalization (i18n): Full RU/EN localization support via vue-i18n.
 
-📦 Quick Start (Docker)
-Ensure you have Docker and Docker Compose installed.
+Separation of Concerns: Clean API/Frontend split, making the codebase scalable and maintainable.
+
+📦 Quick Start (Docker / Laravel Sail)
+Prerequisites: Docker & Docker Compose.
 
 Bash
-# 1. Setup environment
+# 1. Environment Setup
 cp .env.example .env
 
-# 2. Install dependencies & Start containers
+# 2. Install dependencies & Launch containers
 composer install
 ./vendor/bin/sail up -d
 
-# 3. Initialize Database
+# 3. Database Initialization
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate --seed
 
-# 4. Compile Frontend
+# 4. Frontend Assets
 ./vendor/bin/sail npm install
-./vendor/bin/sail npm run dev
-Access Points:
-Application: http://localhost:8080
+./vendor/bin/sail npm run dev -- --host
+Local Access Points:
+App: http://localhost:8080
 
-Admin Panel: /moonshine (Credentials: admin@example.com / password)
+Admin: http://localhost:8080/moonshine (User: admin@example.com / Pass: password)
 
-Mailpit (Emails): http://localhost:8025
+Mailpit: http://localhost:8025
+
+phpMyAdmin: http://localhost:8090 (Host: mysql, User: sail, Pass: password)
 
 📁 Project Structure
-app/Services — Core business logic (The "Brain" of the app).
+app/Services — The core business logic (The "Brain" of the app).
 
-app/Http/Resources — API transformation layer.
+app/Http/Resources — API transformation layer for consistent JSON responses.
 
-resources/js — Modular Vue 3 frontend.
+resources/js — Modular Frontend architecture with Vue 3.
 
-🧪 Testing
+🧪 Quality Assurance
 Bash
 ./vendor/bin/sail artisan test
+📬 Notes for Recruiters
+Demo Flow: Please check /hotels, /tour-selection, /news, and /reviews for a complete end-to-end experience.
 
+Admin Access: Use the provided MoonShine credentials to explore the Role-Based Access Control (RBAC) and content management capabilities.
 
 <img width="1884" height="918" alt="image" src="https://github.com/user-attachments/assets/4ca23185-9b49-472a-b635-7d0b04deb4a7" />
 <img width="1884" height="918" alt="image" src="https://github.com/user-attachments/assets/d04fc2c7-24b0-4c06-86a1-b1e478699731" />
