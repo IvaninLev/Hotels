@@ -13,7 +13,9 @@ class TourService
     public function __construct()
     {
     }
-    private function getBaseQuery(){
+
+    private function getBaseQuery()
+    {
         return Tour::with([
             'hotel',
             'tourDepartures',
@@ -22,6 +24,7 @@ class TourService
         ]);
 
     }
+
     public function applySorting($query, ?string $sort): void
     {
         match ($sort) {
@@ -34,15 +37,15 @@ class TourService
         };
     }
 
-    public function filtered(array $data)
+    public function filtered(Request $request)
     {
-       $query = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $query->when($data['searchQuery'], function ($query, $searchQ) {
+        $query->when($request->input('searchQuery'), function ($query, $searchQ) {
             $query->where('name', 'like', '%' . $searchQ . '%');
         });
 
-        $query->when($data['toPlace'], function ($query, $searchQ) {
+        $query->when($request->input('toPlace'), function ($query, $searchQ) {
             $query->whereHas('city', function ($query) use ($searchQ) {
                 $query->where('name', 'like', '%' . $searchQ . '%');
             })->orWherehas('country', function ($query) use ($searchQ) {
@@ -50,13 +53,13 @@ class TourService
             });
         });
 
-        $query->when($data['flightDate'], function ($query, $date) {
+        $query->when($request->input('flightDate'), function ($query, $date) {
             $query->whereHas('tourDepartures', function ($q) use ($date) {
                 $q->whereDate('departure_date', $date);
             });
         });
 
-        $season = $data['season'];
+        $season = $request->input('season');
         $seasonMonths = match ($season) {
             'winter' => [12, 1, 2],
             'spring' => [3, 4, 5],
@@ -70,7 +73,7 @@ class TourService
             });
         }
 
-        $query->when($data['minRating'], function ($q, $rating) {
+        $query->when($request->input('minRating'), function ($q, $rating) {
             if (is_numeric($rating)) {
                 $q->whereHas('hotel', function ($q) use ($rating) {
                     $q->where('rating', '>=', $rating);
@@ -78,7 +81,7 @@ class TourService
             }
 
         });
-        $query->when($data['duration'], function ($q, $duration) {
+        $query->when($request->input('duration'), function ($q, $duration) {
             if (is_array($duration) && count($duration) >= 2) {
                 $min = (int)$duration[0];
                 $max = (int)$duration[1];
@@ -88,14 +91,14 @@ class TourService
             }
         });
 
-        $query->when($data['foodType'], function ($q, $code) {
+        $query->when($request->input('foodType'), function ($q, $code) {
             $q->where(function ($q) use ($code) {
                 $q->WhereHas('hotel.nutrition', fn($q) => $q->where('code', $code));
             });
         });
 
 
-        $query->when($data['amenities'], function ($q, $amenities) {
+        $query->when($request->input('amenities'), function ($q, $amenities) {
             if (is_array($amenities) && count($amenities) > 0) {
                 $q->whereHas('hotel.features', function ($q) use ($amenities) {
                     $q->whereIn('name', $amenities);
@@ -108,9 +111,9 @@ class TourService
         return $query->paginate(PaginationEnum::PAGE_SIZE->value);
     }
 
-    public function searched(array $data)
+    public function searched(Request $request)
     {
-        $query =  $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
         // откуда
 //        $query->when($request->from, function ($q, $from) {
@@ -120,7 +123,7 @@ class TourService
 //        });
 
         // куда
-        $query->when($data['toPlace'], function ($query, $searchQ) {
+        $query->when($request->input('toPlace'), function ($query, $searchQ) {
             $query->whereHas('city', function ($query) use ($searchQ) {
                 $query->where('name', 'like', '%' . $searchQ . '%');
             })->orWherehas('country', function ($query) use ($searchQ) {
@@ -128,14 +131,14 @@ class TourService
             });
         });
 
-        $query->when($data['flightDate'], function ($q, $date) {
+        $query->when($request->input('flightDate'), function ($q, $date) {
             $q->where(function ($q) use ($date) {
                 $q->whereDate('active_from', '<=', $date)
                     ->whereDate('active_to', '>=', $date);
             });
         });
 
-        $query->when($data['duration'], function ($q, $duration) {
+        $query->when($request->input('duration'), function ($q, $duration) {
             if (str_contains($duration, '-')) {
                 [$min, $max] = explode('-', $duration);
                 $q->whereHas('tourDepartures', function ($q) use ($min, $max) {
@@ -148,7 +151,7 @@ class TourService
             }
         });
 
-        $persons = $data['tourists'] ?? $data['persons'];
+        $persons = $request->input('tourists') ?? $request->input('persons');
         if ($persons !== null && $persons !== '') {
             $query->where(function ($q) use ($persons) {
                 $q->where('base_persons', '>=', (int)$persons)

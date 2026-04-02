@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaginationEnum;
 use App\Http\Resources\TourResource;
-use App\Models\Hotel;
 use App\Models\Tour;
 use App\Services\TourService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ToursController extends Controller
 {
@@ -49,12 +47,12 @@ class ToursController extends Controller
 
     public function searched(Request $request, TourService $service)
     {
-        return TourResource::collection($service->filtered($request->all));
+        return TourResource::collection($service->searched($request));
     }
 
     public function filtered(Request $request, TourService $service)
     {
-        return TourResource::collection($service->filtered($request->all));
+        return TourResource::collection($service->filtered($request));
     }
 
 }
