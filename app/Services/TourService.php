@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class TourService
 {
-    public function __construct()
-    {
-    }
-
     private function getBaseQuery()
     {
         return Tour::with([
@@ -106,7 +102,7 @@ class TourService
             }
         });
 
-        $this->applySorting($query, $data['sort'] ?? null);
+        $this->applySorting($query, $request->input('sort') ?? null);
 
         return $query->paginate(PaginationEnum::PAGE_SIZE->value);
     }

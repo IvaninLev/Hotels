@@ -7,7 +7,7 @@ import Sidebar from "./Sidebar.vue";
 import {useSearchStore} from "../../stores/useSearchStore.js";
 import {useI18n} from "vue-i18n";
 
-const { t, tm } = useI18n({ useScope: 'global' })
+const {t, tm} = useI18n({useScope: 'global'})
 const searchStore = useSearchStore();
 const route = useRoute()
 const router = useRouter()
@@ -18,7 +18,7 @@ const isFiltered = ref(false)
 const isSearched = ref(false)
 const sortOptions = computed(() => {
     const options = tm('tour.sortOptions') ?? {}
-    return Object.entries(options).map(([value, label]) => ({ value, label }))
+    return Object.entries(options).map(([value, label]) => ({value, label}))
 })
 const selectedSort = ref(null)
 const sort = ref(false)
@@ -205,7 +205,7 @@ watch(page, async () => {
             </div>
             <v-card-title class="flex d-flex">
                 <h2>{{ t('tour.foundTitle') }}</h2>
-                <v-card-subtitle class="pt-5">({{ t('tour.offers',{count: totalToursCount}) }})</v-card-subtitle>
+                <v-card-subtitle class="pt-5">({{ t('tour.offers', {count: totalToursCount}) }})</v-card-subtitle>
             </v-card-title>
             <div class="d-flex justify-space-between align-center w-100">
 
@@ -292,17 +292,17 @@ watch(page, async () => {
                             <span class="text-body-2">отзывов</span>
                         </div>
 
-                <div class="mt-9">
-                    <div class="d-flex align-center mb-2">
-                        <v-icon size="small" class="mr-2">mdi-calendar</v-icon>
-                        <span class="text-body-2">{{ item.date }} ({{ item.days }} {{t('tour.days')}})</span>
-                    </div>
-                    <div>
-                        <v-icon size="small" class="mr-2">mdi-silverware-fork-knife</v-icon>
-                        <span class="text-body-2">{{ item?.hotel?.nutrition.find(n => n.is_base)?.name }}</span>
-                    </div>
+                        <div class="mt-9">
+                            <div class="d-flex align-center mb-2">
+                                <v-icon size="small" class="mr-2">mdi-calendar</v-icon>
+                                <span class="text-body-2">{{ item.date }} ({{ item.days }} {{ t('tour.days') }})</span>
+                            </div>
+                            <div>
+                                <v-icon size="small" class="mr-2">mdi-silverware-fork-knife</v-icon>
+                                <span class="text-body-2">{{ item?.hotel?.nutrition.find(n => n.is_base)?.name }}</span>
+                            </div>
 
-                </div>
+                        </div>
 
 
                     </div>
@@ -340,7 +340,7 @@ watch(page, async () => {
                                 :to="`/tour/${item.id}`"
                                 block
                             >
-                                {{ t('tour.readMore')}}
+                                {{ t('tour.readMore') }}
                                 <v-icon end>mdi-arrow-bottom-right</v-icon>
                             </v-btn>
                         </div>
