@@ -150,8 +150,7 @@ class TourService
         $persons = $request->input('tourists') ?? $request->input('persons');
         if ($persons !== null && $persons !== '') {
             $query->where(function ($q) use ($persons) {
-                $q->where('base_persons', '>=', (int)$persons)
-                    ->orWhere('persons', '>=', (int)$persons);
+                $q->where('persons', '>=', (int)$persons);
             });
         }
 
