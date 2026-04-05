@@ -150,11 +150,10 @@ class TourService
         $persons = $request->input('tourists') ?? $request->input('persons');
         if ($persons !== null && $persons !== '') {
             $query->where(function ($q) use ($persons) {
-                $q->where('persons', '>=', (int)$persons);
-            });
+                $q->where('persons', '>=', (int)$persons);});
         }
 
-        $this->applySorting($query, $data['sort'] ?? null);
+        $this->applySorting($query, $request->input('sort')?? null);
 
         return $query->paginate(PaginationEnum::PAGE_SIZE->value);
     }
