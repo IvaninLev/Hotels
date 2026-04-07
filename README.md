@@ -43,8 +43,6 @@ App: http://localhost:8080
 
 Admin: http://localhost:8080/moonshine (User: admin@example.com / Pass: password)
 
-Mailpit: http://localhost:8025
-
 phpMyAdmin: http://localhost:8090 (Host: mysql, User: root, Pass: password)
 
 # Project Structure
