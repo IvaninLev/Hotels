@@ -27,18 +27,15 @@ Separation of Concerns: Clean API/Frontend split, making the codebase scalable a
 Prerequisites: Docker & Docker Compose.
 
 Bash
-# 1. Environment Setup
+# Setup
 cp .env.example .env
 
-# 2. Install dependencies & Launch containers
 composer install
 ./vendor/bin/sail up -d
 
-# 3. Database Initialization
 ./vendor/bin/sail artisan key:generate
 ./vendor/bin/sail artisan migrate --seed
 
-# 4. Frontend Assets
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run dev -- --host
 Local Access Points:
