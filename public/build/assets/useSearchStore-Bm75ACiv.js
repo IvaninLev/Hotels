@@ -1,0 +1,1 @@
+import{d as t}from"./app-DWWjN-Yu.js";const a=t("useSearchStore",{state:()=>({tours:[],toursMeta:{},reviews:[],reviewsMeta:{}}),actions:{setTours(e){const r=Array.isArray(e);this.tours=r?e:e?.data??[],this.toursMeta=r?{}:e?.meta??{}},setSearchQuery(e){this.searchQuery=e}}});export{a as u};

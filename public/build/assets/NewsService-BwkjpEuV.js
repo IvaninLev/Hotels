@@ -1,0 +1,1 @@
+import{a}from"./index-qFyJwsfU.js";class r{async getNews(){return((await a.get("/api/news")).data?.data??[]).map(s=>{const e=Array.isArray(s.image)?s.image:{};return{...s,image:e,cols:6,rows:1}})}}const c=new r;export{c as N};

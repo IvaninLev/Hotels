@@ -3,6 +3,7 @@
 /.idea/
 .env
 .env.*
+!.env.example
 /storage/logs/
 /storage/framework/
 /public/storage

@@ -1,0 +1,1 @@
+import{a as t}from"./index-qFyJwsfU.js";class a{async getFilteredTours(e){return await t.get("/api/tours/filters",{params:e}).then(r=>r.data)}async getSearchedTours(e){return(await t.get("/api/tours/search",{params:e})).data}}const o=new a;export{o as F};

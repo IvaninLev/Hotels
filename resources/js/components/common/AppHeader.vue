@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 <template>
     <div style="position: relative;">
         <v-app-bar style="position:absolute; " flat height="80" class="px-6 bg-white shadow-sm" elevation="2">
-            <router-link to="/" class="d-flex align-center text-h5 font-weight-bold text-red text-decoration-none">
+            <router-link to="/" class="d-flex  align-center text-h5 font-weight-bold text-red text-decoration-none">
                 Anex <span class="ml-1 text-deep-purple-accent-4"><v-icon>mdi-heart-outline</v-icon></span>
             </router-link>
             <div>
@@ -61,11 +61,11 @@ onBeforeUnmount(() => {
 
             <div class="d-none d-md-flex align-center">
 
-            <router-link to="/tour-selection" class="nav-link mx-4 text-black">
-                {{ t('header.tourSelection') }}
-            </router-link>
+                <router-link to="/tour-selection" class="nav-link mx-4 text-black">
+                    {{ t('header.tourSelection') }}
+                </router-link>
 
-            <span class="nav-link mx-4 text-black" style="cursor:pointer" @click="show = !show">
+                <span class="nav-link mx-4 text-black" style="cursor:pointer" @click="show = !show">
                       {{ t('header.hotTours') }}
             </span>
 
@@ -73,9 +73,9 @@ onBeforeUnmount(() => {
                 <!--                    СТРАНЫ-->
                 <!--                </router-link>`-->
 
-            <router-link to="/hotels" class="nav-link mx-4 text-black">
-                {{ t('header.hotels') }}
-            </router-link>
+                <router-link to="/hotels" class="nav-link mx-4 text-black">
+                    {{ t('header.hotels') }}
+                </router-link>
 
             </div>
 
@@ -141,7 +141,10 @@ onBeforeUnmount(() => {
                             <h4 style="font-weight:700; margin-bottom:8px">{{ t('header.forTourists') }}</h4>
                             <!--                            <router-link to="/countries" class="sub-link">Страны</router-link>-->
                             <router-link to="/hotels" class="sub-link">{{ t('header.hotels') }}</router-link>
-                            <router-link to="/tour-selection" class="sub-link">{{ t('header.tourSelection') }}</router-link>
+                            <router-link to="/tour-selection" class="sub-link">{{
+                                    t('header.tourSelection')
+                                }}
+                            </router-link>
                             <!--                            <router-link to="/hot-tours" class="sub-link">Горящие туры</router-link>-->
                             <!--                            <router-link to="/how-to-buy" class="sub-link">Как купить и оплатить тур</router-link>-->
                         </v-col>
