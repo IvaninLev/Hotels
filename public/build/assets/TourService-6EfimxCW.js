@@ -1,0 +1,1 @@
+import{a as t}from"./index-qFyJwsfU.js";class e{async getTours(){return(await t.get("/api/tours")).data.data}async getToursPage(a=1,s=null){return(await t.get("/api/tours",{params:{page:a,sort:s}})).data}async getTour(a){const s=await t.get(`/api/tours/${a}`);return s.data?.data??s.data}}const u=new e;export{u as T};

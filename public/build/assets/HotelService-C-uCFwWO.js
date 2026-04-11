@@ -1,0 +1,1 @@
+import{a as s}from"./index-qFyJwsfU.js";class a{async getHotels(){return(await s.get("/api/hotels")).data.data}async getHotelsPage(e=1){return(await s.get("/api/hotels",{params:{page:e}})).data}}const n=new a;export{n as H};

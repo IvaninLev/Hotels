@@ -1,0 +1,1 @@
+import{a}from"./index-qFyJwsfU.js";class r{async getReviews(e=1){return(await a.get(`/api/reviews?page=${e}`)).data}async createReview(e){return(await a.post("/api/reviews",e)).data}}const c=new r;export{c as r};

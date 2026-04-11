@@ -71,7 +71,7 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - hotels
-    phpmyadmin:
+    phpm80yadmin:
         image: phpmyadmin/phpmyadmin
         restart: always
         ports:

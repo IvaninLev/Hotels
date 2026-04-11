@@ -1,0 +1,294 @@
+{
+  "_FilterService-BXTFzC0i.js": {
+    "file": "assets/FilterService-BXTFzC0i.js",
+    "name": "FilterService",
+    "imports": [
+      "_index-qFyJwsfU.js"
+    ]
+  },
+  "_HotelService-C-uCFwWO.js": {
+    "file": "assets/HotelService-C-uCFwWO.js",
+    "name": "HotelService",
+    "imports": [
+      "_index-qFyJwsfU.js"
+    ]
+  },
+  "_NewsService-BwkjpEuV.js": {
+    "file": "assets/NewsService-BwkjpEuV.js",
+    "name": "NewsService",
+    "imports": [
+      "_index-qFyJwsfU.js"
+    ]
+  },
+  "_ReviewsService-ukrRg8nB.js": {
+    "file": "assets/ReviewsService-ukrRg8nB.js",
+    "name": "ReviewsService",
+    "imports": [
+      "_index-qFyJwsfU.js"
+    ]
+  },
+  "_TourService-6EfimxCW.js": {
+    "file": "assets/TourService-6EfimxCW.js",
+    "name": "TourService",
+    "imports": [
+      "_index-qFyJwsfU.js"
+    ]
+  },
+  "_bridge-DiMFieco.js": {
+    "file": "assets/bridge-DiMFieco.js",
+    "name": "bridge",
+    "assets": [
+      "assets/woman-working-BISg2nhv.png",
+      "assets/bridge-BUIDHkK1.png"
+    ]
+  },
+  "_compiler-dom-CLQCgJZX.css": {
+    "file": "assets/compiler-dom-CLQCgJZX.css",
+    "src": "_compiler-dom-CLQCgJZX.css"
+  },
+  "_compiler-dom.esm-bundler-DEI1WqJa.js": {
+    "file": "assets/compiler-dom.esm-bundler-DEI1WqJa.js",
+    "name": "compiler-dom.esm-bundler",
+    "css": [
+      "assets/compiler-dom-CLQCgJZX.css"
+    ],
+    "assets": [
+      "assets/materialdesignicons-webfont-CSr8KVlo.eot",
+      "assets/materialdesignicons-webfont-Dp5v-WZN.woff2",
+      "assets/materialdesignicons-webfont-PXm3-2wK.woff",
+      "assets/materialdesignicons-webfont-B7mPwVP_.ttf"
+    ]
+  },
+  "_index-qFyJwsfU.js": {
+    "file": "assets/index-qFyJwsfU.js",
+    "name": "index"
+  },
+  "_useSearchStore-Bm75ACiv.js": {
+    "file": "assets/useSearchStore-Bm75ACiv.js",
+    "name": "useSearchStore",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot": {
+    "file": "assets/materialdesignicons-webfont-CSr8KVlo.eot",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff": {
+    "file": "assets/materialdesignicons-webfont-PXm3-2wK.woff",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2": {
+    "file": "assets/materialdesignicons-webfont-Dp5v-WZN.woff2",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2"
+  },
+  "resources/js/admin/app.js": {
+    "file": "assets/app-BDgO8PC5.js",
+    "name": "app",
+    "src": "resources/js/admin/app.js",
+    "isEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/app-BXoCJEqv.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DWWjN-Yu.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js"
+    ],
+    "dynamicImports": [
+      "resources/js/pages/home/index.vue",
+      "resources/js/pages/hotels/index.vue",
+      "resources/js/pages/TourSelection/index.vue",
+      "resources/js/pages/TourSelection/Details.vue",
+      "resources/js/pages/reviews/index.vue",
+      "resources/js/pages/News/index.vue",
+      "resources/js/pages/About/index.vue"
+    ],
+    "css": [
+      "assets/app-C02RMmlp.css"
+    ]
+  },
+  "resources/js/pages/About/index.vue": {
+    "file": "assets/index-D1fsFOnh.js",
+    "name": "index",
+    "src": "resources/js/pages/About/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_bridge-DiMFieco.js"
+    ],
+    "css": [
+      "assets/index-9w6Zm2DD.css"
+    ],
+    "assets": [
+      "assets/AbUsHeader-DjjRpd6-.png"
+    ]
+  },
+  "resources/js/pages/News/index.vue": {
+    "file": "assets/index-TiM7z37H.js",
+    "name": "index",
+    "src": "resources/js/pages/News/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_NewsService-BwkjpEuV.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/index-Bh80bEe6.css"
+    ],
+    "assets": [
+      "assets/NewsHeader-BMJ7D8Ga.svg"
+    ]
+  },
+  "resources/js/pages/TourSelection/Details.vue": {
+    "file": "assets/Details--PSwzMAz.js",
+    "name": "Details",
+    "src": "resources/js/pages/TourSelection/Details.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "_TourService-6EfimxCW.js",
+      "_index-qFyJwsfU.js",
+      "_useSearchStore-Bm75ACiv.js",
+      "_compiler-dom.esm-bundler-DEI1WqJa.js"
+    ],
+    "css": [
+      "assets/Details-DMJ0uZcP.css"
+    ]
+  },
+  "resources/js/pages/TourSelection/index.vue": {
+    "file": "assets/index-TWMXJB51.js",
+    "name": "index",
+    "src": "resources/js/pages/TourSelection/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_useSearchStore-Bm75ACiv.js",
+      "_FilterService-BXTFzC0i.js",
+      "resources/js/app.js",
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_TourService-6EfimxCW.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/index-kuFOoNkR.css"
+    ],
+    "assets": [
+      "assets/unsplash-ChJc_vO0.svg"
+    ]
+  },
+  "resources/js/pages/home/index.vue": {
+    "file": "assets/index-DzQ2cJID.js",
+    "name": "index",
+    "src": "resources/js/pages/home/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "_FilterService-BXTFzC0i.js",
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_TourService-6EfimxCW.js",
+      "_HotelService-C-uCFwWO.js",
+      "_ReviewsService-ukrRg8nB.js",
+      "_NewsService-BwkjpEuV.js",
+      "_bridge-DiMFieco.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/index-CFlcIXuM.css"
+    ],
+    "assets": [
+      "assets/midnight-BdcO-Njw.svg",
+      "assets/desert-kzpAzAed.svg",
+      "assets/mountians-BRYmnuHy.svg"
+    ]
+  },
+  "resources/js/pages/hotels/index.vue": {
+    "file": "assets/index-CH2aGLLj.js",
+    "name": "index",
+    "src": "resources/js/pages/hotels/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_HotelService-C-uCFwWO.js",
+      "_TourService-6EfimxCW.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/index-2BGdGBnA.css"
+    ],
+    "assets": [
+      "assets/Deluxe-Beach-D8mYGKT2.svg"
+    ]
+  },
+  "resources/js/pages/reviews/index.vue": {
+    "file": "assets/index-Bc8UMwbv.js",
+    "name": "index",
+    "src": "resources/js/pages/reviews/index.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_compiler-dom.esm-bundler-DEI1WqJa.js",
+      "_ReviewsService-ukrRg8nB.js",
+      "resources/js/app.js",
+      "_useSearchStore-Bm75ACiv.js",
+      "_index-qFyJwsfU.js"
+    ],
+    "css": [
+      "assets/index-gVjZiYEE.css"
+    ],
+    "assets": [
+      "assets/david-straight-DDmMYGXr.svg"
+    ]
+  },
+  "resources/src/images/AbUsHeader.png": {
+    "file": "assets/AbUsHeader-DjjRpd6-.png",
+    "src": "resources/src/images/AbUsHeader.png"
+  },
+  "resources/src/images/Deluxe-Beach.svg": {
+    "file": "assets/Deluxe-Beach-D8mYGKT2.svg",
+    "src": "resources/src/images/Deluxe-Beach.svg"
+  },
+  "resources/src/images/NewsHeader.svg": {
+    "file": "assets/NewsHeader-BMJ7D8Ga.svg",
+    "src": "resources/src/images/NewsHeader.svg"
+  },
+  "resources/src/images/bridge.png": {
+    "file": "assets/bridge-BUIDHkK1.png",
+    "src": "resources/src/images/bridge.png"
+  },
+  "resources/src/images/david-straight.svg": {
+    "file": "assets/david-straight-DDmMYGXr.svg",
+    "src": "resources/src/images/david-straight.svg"
+  },
+  "resources/src/images/desert.svg": {
+    "file": "assets/desert-kzpAzAed.svg",
+    "src": "resources/src/images/desert.svg"
+  },
+  "resources/src/images/midnight.svg": {
+    "file": "assets/midnight-BdcO-Njw.svg",
+    "src": "resources/src/images/midnight.svg"
+  },
+  "resources/src/images/mountians.svg": {
+    "file": "assets/mountians-BRYmnuHy.svg",
+    "src": "resources/src/images/mountians.svg"
+  },
+  "resources/src/images/unsplash.svg": {
+    "file": "assets/unsplash-ChJc_vO0.svg",
+    "src": "resources/src/images/unsplash.svg"
+  },
+  "resources/src/images/woman-working.png": {
+    "file": "assets/woman-working-BISg2nhv.png",
+    "src": "resources/src/images/woman-working.png"
+  }
+}
