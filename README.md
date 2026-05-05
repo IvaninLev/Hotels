@@ -17,15 +17,8 @@ Single Page Application for discovering and booking holiday packages. Built with
 - Clean API/Frontend split for scalability and maintainability.
 
 ## Quick Start (Docker / Laravel Sail)
-```bash
-cp .env.example .env
-composer install
-./vendor/bin/sail up -d
-./vendor/bin/sail artisan key:generate
-./vendor/bin/sail artisan migrate --seed
-./vendor/bin/sail npm install
-./vendor/bin/sail npm run dev -- --host
-```
+make install-node-packages
+make start
 
 Local access:
 - App: http://localhost:8080
