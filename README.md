@@ -1,36 +1,43 @@
 # HotelsSearch — Full-Stack Tour Booking Platform
 
-Single Page Application for discovering and booking holiday packages. Built with Clean Architecture, a dedicated service layer, and an optimized DX.
+A comprehensive Single Page Application for discovering and booking holiday packages. Built with focus on Clean Architecture, dedicated service layers, and scalability.
 
-## Tech Stack
-- Backend: PHP 8.4, Laravel 12 (Sail), Sanctum, API Resources
-- Frontend: Vue 3 (Composition API), Pinia, Vuetify 3, Vite
-- Data: MySQL 8, Redis
-- Infra: Docker / Laravel Sail, Mailpit, phpMyAdmin
-- Admin: MoonShine (RBAC, content management)
+## 🛠 Tech Stack
+- **Backend:** PHP 8.3+, Laravel 12 (Sail), Sanctum, API Resources
+- **Frontend:** Vue 3 (Composition API), Pinia, Vuetify 3, Vite
+- **Admin Panel:** MoonShine (RBAC, Content Management)
+- **Database & Cache:** MySQL 8, Redis
+- **Infra:** Docker (Laravel Sail), Mailpit, phpMyAdmin
 
-## Architecture Highlights
-- Service Layer Pattern: business logic in `app/Services` (e.g., `TourService`) decoupled from controllers.
-- Advanced Filtering: price ranges, hotel ratings, flight durations, nutrition types, amenities.
-- Reactive SPA: Vue 3 + Pinia for synchronized state.
-- Internationalization: RU/EN via `vue-i18n`.
-- Clean API/Frontend split for scalability and maintainability.
+## 🏗 Architecture Highlights
+- **Service Layer Pattern:** All business logic (pricing logic, tour selection) resides in `app/Services`, keeping Controllers thin and maintainable.
+- **Advanced Filtering:** Complex filtering system for price ranges, hotel ratings, flight durations, and amenities.
+- **Reactive State:** Vue 3 + Pinia ensures synchronized data across the entire SPA.
+- **i18n:** Multi-language support (RU/EN) via `vue-i18n`.
 
-## Quick Start (Docker / Laravel Sail)
+## 📦 Quick Start (Local Setup)
+
+1. **Environment:**
+   bash
+   cp .env.example .env
+Build & Install:
+
+Bash
+make up
 make install-node-packages
+make refresh
+Launch:
+
+Bash
 make start
+🔗 Local Access Points
+App: http://localhost:8080
 
-Local access:
-- App: http://localhost:8080
-- Admin: http://localhost:8080/moonshine (User: admin@example.com / Pass: password)
-- Mailpit: http://localhost:8025
-- phpMyAdmin: http://localhost:8090 (Host: mysql, User: root, Pass: password)
+Admin: /moonshine (admin@example.com / password)
 
-## Quality Assurance
-```bash
-./vendor/bin/sail artisan test
-```
+Mailpit: http://localhost:8025
 
+Database: phpMyAdmin at :8090 (Host: mysql, User: root)
 ## Demo Flow
 Browse `/hotels`, `/tour-selection`, `/news`, and `/reviews` for an end-to-end experience.
 
